@@ -1,0 +1,78 @@
+Decision Trees with Package "rpart"
+========================================================
+### Andy Ninh, 2014
+========================================================
+
+
+```{r}
+library(mboost)
+```
+
+```{r}
+library(rpart)
+```
+
+## Load the Bodyfat Data
+```{r}
+data("bodyfat", package = "mboost")
+dim(bodyfat)
+```
+
+```{r}
+attributes(bodyfat)
+```
+
+```{r}
+bodyfat[1:5,]
+```
+
+## Splitting Bodyfat Data into Training and Test Subsets
+```{r}
+set.seed(1234)
+ind <- sample(2, nrow(bodyfat), replace=TRUE, prob=c(0.7, 0.3))
+bodyfat.train <- bodyfat[ind==1,]
+bodyfat.test <- bodyfat[ind==2,]
+```
+
+## Train a Decision Tree
+```{r}
+myFormula <- DEXfat ~ age + waistcirc + hipcirc + elbowbreadth + kneebreadth
+bodyfat_rpart <- rpart(myFormula, data = bodyfat.train,
+                       control = rpart.control(minsplit = 10))
+attributes(bodyfat_rpart)
+```
+
+```{r}
+print(bodyfat_rpart$cptable)
+```
+
+```{r}
+print(bodyfat_rpart)
+```
+
+```{r}
+plot(bodyfat_rpart)
+text(bodyfat_rpart, use.n=T)
+```
+
+## Then we select the tree with the minimum prediction error
+```{r}
+opt <- which.min(bodyfat_rpart$cptable[,"xerror"])
+cp <- bodyfat_rpart$cptable[opt, "CP"]
+bodyfat_prune <- prune(bodyfat_rpart, cp = cp)
+print(bodyfat_prune)
+```
+
+```{r}
+plot(bodyfat_prune)
+text(bodyfat_prune, use.n=T)
+```
+
+## Prediction Result using the Selected Tree
+```{r}
+DEXfat_pred <- predict(bodyfat_prune, newdata=bodyfat.test)
+xlim <- range(bodyfat$DEXfat)
+plot(DEXfat_pred ~ DEXfat, data=bodyfat.test, xlab="Observed",
+     ylab="Predicted", ylim=xlim, xlim=xlim)
+abline(a=0, b=1)
+```
