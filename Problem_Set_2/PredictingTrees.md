@@ -38,7 +38,7 @@ legend(1, 4.5, legend = unique(iris$Species), col = unique(as.numeric(iris$Speci
     pch = 19)
 ```
 
-![plot of chunk unnamed-chunk-3](figure/unnamed-chunk-3.png) 
+![plot of chunk unnamed-chunk-3](figure1/unnamed-chunk-3.png) 
 
 
 ### An alternative is library(rpart)
@@ -66,7 +66,7 @@ plot(tree1)
 text(tree1)
 ```
 
-![plot of chunk unnamed-chunk-5](figure/unnamed-chunk-5.png) 
+![plot of chunk unnamed-chunk-5](figure1/unnamed-chunk-5.png) 
 
 
 ### Another way of looking at a CART model
@@ -78,7 +78,7 @@ legend(1.75, 4.5, legend = unique(iris$Species), col = unique(as.numeric(iris$Sp
     pch = 19)
 ```
 
-![plot of chunk unnamed-chunk-6](figure/unnamed-chunk-6.png) 
+![plot of chunk unnamed-chunk-6](figure1/unnamed-chunk-6.png) 
 
 
 ### Predicting new values
@@ -124,7 +124,7 @@ plot(newdata$Petal.Width, newdata$Sepal.Width, col = as.numeric(pred1), pch = 19
 partition.tree(tree1, "Species", add = TRUE)
 ```
 
-![plot of chunk unnamed-chunk-8](figure/unnamed-chunk-8.png) 
+![plot of chunk unnamed-chunk-8](figure1/unnamed-chunk-8.png) 
 
 
 ## Pruning trees example: Cars
@@ -182,7 +182,7 @@ plot(treeCars)
 text(treeCars)
 ```
 
-![plot of chunk unnamed-chunk-10](figure/unnamed-chunk-10.png) 
+![plot of chunk unnamed-chunk-10](figure1/unnamed-chunk-10.png) 
 
 
 ### Plot errors
@@ -193,7 +193,7 @@ plot(cv.tree(treeCars, FUN = prune.tree, method = "misclass"))
 plot(cv.tree(treeCars))
 ```
 
-![plot of chunk unnamed-chunk-11](figure/unnamed-chunk-11.png) 
+![plot of chunk unnamed-chunk-11](figure1/unnamed-chunk-11.png) 
 
 
 ### Prune the tree
@@ -204,7 +204,7 @@ plot(pruneTree)
 text(pruneTree)
 ```
 
-![plot of chunk unnamed-chunk-12](figure/unnamed-chunk-12.png) 
+![plot of chunk unnamed-chunk-12](figure1/unnamed-chunk-12.png) 
 
 
 ### Show resubstitution error
