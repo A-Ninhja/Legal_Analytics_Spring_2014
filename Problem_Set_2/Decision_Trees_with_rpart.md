@@ -224,5 +224,5 @@ plot(DEXfat_pred ~ DEXfat, data = bodyfat.test, xlab = "Observed", ylab = "Predi
 abline(a = 0, b = 1)
 ```
 
-![plot of chunk unnamed-chunk-13](figure/unnamed-chunk-13.png) 
+![plot of chunk unnamed-chunk-13](figure2/unnamed-chunk-13.png) 
 
