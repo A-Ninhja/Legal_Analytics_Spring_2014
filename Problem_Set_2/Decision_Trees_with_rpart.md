@@ -171,7 +171,7 @@ plot(bodyfat_rpart)
 text(bodyfat_rpart, use.n = T)
 ```
 
-![plot of chunk unnamed-chunk-10](figure/unnamed-chunk-10.png) 
+![plot of chunk unnamed-chunk-10](figure2/unnamed-chunk-10.png) 
 
 
 ## Then we select the tree with the minimum prediction error
@@ -211,7 +211,7 @@ plot(bodyfat_prune)
 text(bodyfat_prune, use.n = T)
 ```
 
-![plot of chunk unnamed-chunk-12](figure/unnamed-chunk-12.png) 
+![plot of chunk unnamed-chunk-12](figure2/unnamed-chunk-12.png) 
 
 
 ## Prediction Result using the Selected Tree
