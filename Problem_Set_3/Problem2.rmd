@@ -1,0 +1,184 @@
+Legal Analytics Problem Set 3 - Part 2
+-----------------------------------------------------------------------------
+## Andy Ninh
+-----------------------------------------------------------------------------
+
+## Loading the Gapminder data
+```{r}
+gdURL <- "http://www.stat.ubc.ca/~jenny/notOcto/STAT545A/examples/gapminder/data/gapminderDataFiveYear.txt"
+gDat <- read.delim(file = gdURL)
+```
+
+```{r}
+str(gDat)
+```
+
+## Storing a snippet of the data
+```{r}
+(snippet <- subset(gDat, country == "Canada"))
+```
+
+## Installing and Loading plyr
+```{r}
+install.packages("plyr", dependencies = TRUE)
+library(plyr)
+```
+
+## Using ddply to find the maximum life expentency of each continent
+```{r}
+(maxLeByCont <- ddply(gDat, ~ continent, summarize, maxLifeExp = max(lifeExp)))
+```
+
+## Studying the return value
+```{r}
+str(maxLeByCont)
+levels(maxLeByCont$continent)
+```
+
+## Computing the minimum GDP per capita by continent
+```{r}
+(mingdpPercap <- ddply(gDat, ~ continent, summarize, minGDPperCap = min(gdpPercap)))
+```
+
+## Counting the number of countries in the data set
+```{r}
+ddply(gDat, ~continent, summarize, nUniqCountries = length(unique(country)))
+```
+
+## Alternate method without using summarize()
+```{r}
+ddply(gDat, ~ continent,
+      function(x) return(c(nUniqCountries = length(unique(x$country)))))
+```
+
+## You can compute multiple things per sub-data.frame
+```{r}
+ddply(gDat, ~ continent, summarize,
+      minLifeExp = min(lifeExp), maxLifeExp = max(lifeExp),
+      medGdpPercap = median(gdpPercap))
+```
+
+# Putting it all together using ddply()
+```{r}
+jCountry <- "France"  # pick, but do not hard wire, an example
+(jDat <- subset(gDat, country == jCountry))  # temporary measure!
+```
+
+## Installing and loading lattice for plotting graphics
+```{r}
+install.packages("lattice")
+library(lattice)
+```
+
+## Plotting the data 
+```{r}
+xyplot(lifeExp ~ year, jDat, type = c("p", "r"))  # always plot the data
+jFit <- lm(lifeExp ~ year, jDat)
+summary(jFit)
+```
+
+## Adjusting for fit
+
+```{r}
+(yearMin <- min(gDat$year))
+jFit <- lm(lifeExp ~ I(year - yearMin), jDat)
+summary(jFit)
+## The intercept is around 68. This makes much more sense. So, what is jFit and what can we get out of it?
+class(jFit)
+mode(jFit)
+## So, jFit is of class "lm" and its mode is list. So that means I could use indexing to isolate specific components. But what's in there?
+```
+
+```{r}
+## str(jFit) # too ugly to print here but you should look
+names(jFit)
+jFit$coefficients
+## Using str() and names() reveals a great deal about this "lm" object and reading the help file for lm() would explain a great deal more. In the See Also section we learn there's a generic function coef() which looks promising.
+coef(jFit)
+## We have achieved our goal for this specific country -- we've gotten its intercept and slope. Now we need to package that as a function.
+jFun <- function(x) coef(lm(lifeExp ~ I(year - yearMin), x))
+jFun(jDat)  # trying out our new function ... yes still get same numbers
+```
+
+## Changing the names of the return values
+```{r}
+jFun <- function(x) {
+    estCoefs <- coef(lm(lifeExp ~ I(year - yearMin), x))
+    names(estCoefs) <- c("intercept", "slope")
+    return(estCoefs)
+}
+jFun(jDat)  # trying out our improved function ... yes still get same numbers
+```
+
+## Testing the new function on some examples
+```{r}
+jFun(subset(gDat, country == "Canada"))
+jFun(subset(gDat, country == "Uruguay"))
+jFun(subset(gDat, country == "India"))
+jFun(subset(gDat, country == "Japan"))
+jFun(subset(gDat, country == "Iceland"))
+```
+
+## Scaling up -- Placing the function inside ddply()
+```{r}
+jCoefs <- ddply(gDat, ~country, jFun)
+str(jCoefs)
+tail(jCoefs)
+```
+
+# Review: This would be the final script
+```{r}
+## realistically, you would read the data from a local file
+gdURL <- "http://www.stat.ubc.ca/~jenny/notOcto/STAT545A/examples/gapminder/data/gapminderDataFiveYear.txt"
+gDat <- read.delim(file = gdURL)
+## str(gDat) here when working interactively
+yearMin <- min(gDat$year)
+jFun <- function(x) {
+    estCoefs <- coef(lm(lifeExp ~ I(year - yearMin), x))
+    names(estCoefs) <- c("intercept", "slope")
+    return(estCoefs)
+}
+## jFun(subset(gDat, country == 'India')) to see what it does
+jCoefs <- ddply(gDat, ~country, jFun)
+```
+## Installing and loading xtable 
+```{r}
+install.packages("xtable", dependencies = TRUE)
+library(xtable)
+```
+
+## Pick some countries at random and display their estimated coefficients
+```{r}
+set.seed(916)
+foo <- jCoefs[sample(nrow(jCoefs), size = 15), ]
+foo <- xtable(foo)
+print(foo, type = "html", include.rownames = FALSE)
+## Two easy improvements: include the continent informaiton and sort rationally
+jCoefs <- ddply(gDat, ~country + continent, jFun)
+str(jCoefs)
+tail(jCoefs)
+## Now, prior to making the HTML table, we will sort the data.frame, so it starts with the country with the shortest life expectancy in 1952, and goes to the largest.
+set.seed(916)
+foo <- jCoefs[sample(nrow(jCoefs), size = 15), ]
+foo <- arrange(foo, intercept)
+## foo <- foo[order(foo$intercept), ] # an uglier non-plyr way
+foo <- xtable(foo)
+print(foo, type = "html", include.rownames = FALSE)
+```
+
+# jFun only requires one argument, x. What if it had more than one argument?
+```{r}
+jFunTwoArgs <- function(x, cvShift = 0) {
+    estCoefs <- coef(lm(lifeExp ~ I(year - cvShift), x))
+    names(estCoefs) <- c("intercept", "slope")
+    return(estCoefs)
+}
+jCoefsSilly <- ddply(gDat, ~country, jFunTwoArgs)
+head(jCoefsSilly)
+## We are getting the same estimated slopes but the silly year 0 intercepts we've seen before. Let's use the cvShift = argument to resolve this.
+jCoefsSane <- ddply(gDat, ~country, jFunTwoArgs, cvShift = 1952)
+head(jCoefsSane)
+## We're back to our usual estimated intercepts, which reflect life expectancy in 1952. Of course hard-wiring 1952 is not a great idea, so here's probably our best code yet:
+jCoefsBest <- ddply(gDat, ~country, jFunTwoArgs, cvShift = min(gDat$year))
+head(jCoefsBest)
+```

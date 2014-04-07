@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<!-- saved from url=(0014)about:internet -->
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="x-ua-compatible" content="IE=9" >
+
+<title>Legal Analytics Problem Set 3 - Part 2</title>
+
+<style type="text/css">
+body, td {
+   font-family: sans-serif;
+   background-color: white;
+   font-size: 12px;
+   margin: 8px;
+}
+
+tt, code, pre {
+   font-family: 'DejaVu Sans Mono', 'Droid Sans Mono', 'Lucida Console', Consolas, Monaco, monospace;
+}
+
+h1 { 
+   font-size:2.2em; 
+}
+
+h2 { 
+   font-size:1.8em; 
+}
+
+h3 { 
+   font-size:1.4em; 
+}
+
+h4 { 
+   font-size:1.0em; 
+}
+
+h5 { 
+   font-size:0.9em; 
+}
+
+h6 { 
+   font-size:0.8em; 
+}
+
+a:visited {
+   color: rgb(50%, 0%, 50%);
+}
+
+pre {	
+   margin-top: 0;
+   max-width: 95%;
+   border: 1px solid #ccc;
+   white-space: pre-wrap;
+}
+
+pre code {
+   display: block; padding: 0.5em;
+}
+
+code.r, code.cpp {
+   background-color: #F8F8F8;
+}
+
+table, td, th {
+  border: none;
+}
+
+blockquote {
+   color:#666666;
+   margin:0;
+   padding-left: 1em;
+   border-left: 0.5em #EEE solid;
+}
+
+hr {
+   height: 0px;
+   border-bottom: none;
+   border-top-width: thin;
+   border-top-style: dotted;
+   border-top-color: #999999;
+}
+
+@media print {
+   * { 
+      background: transparent !important; 
+      color: black !important; 
+      filter:none !important; 
+      -ms-filter: none !important; 
+   }
+
+   body { 
+      font-size:12pt; 
+      max-width:100%; 
+   }
+       
+   a, a:visited { 
+      text-decoration: underline; 
+   }
+
+   hr { 
+      visibility: hidden;
+      page-break-before: always;
+   }
+
+   pre, blockquote { 
+      padding-right: 1em; 
+      page-break-inside: avoid; 
+   }
+
+   tr, img { 
+      page-break-inside: avoid; 
+   }
+
+   img { 
+      max-width: 100% !important; 
+   }
+
+   @page :left { 
+      margin: 15mm 20mm 15mm 10mm; 
+   }
+     
+   @page :right { 
+      margin: 15mm 10mm 15mm 20mm; 
+   }
+
+   p, h2, h3 { 
+      orphans: 3; widows: 3; 
+   }
+
+   h2, h3 { 
+      page-break-after: avoid; 
+   }
+}
+
+</style>
+
+<!-- Styles for R syntax highlighter -->
+<style type="text/css">
+   pre .operator,
+   pre .paren {
+     color: rgb(104, 118, 135)
+   }
+
+   pre .literal {
+     color: rgb(88, 72, 246)
+   }
+
+   pre .number {
+     color: rgb(0, 0, 205);
+   }
+
+   pre .comment {
+     color: rgb(76, 136, 107);
+   }
+
+   pre .keyword {
+     color: rgb(0, 0, 255);
+   }
+
+   pre .identifier {
+     color: rgb(0, 0, 0);
+   }
+
+   pre .string {
+     color: rgb(3, 106, 7);
+   }
+</style>
+
+<!-- R syntax highlighter -->
+<script type="text/javascript">
+var hljs=new function(){function m(p){return p.replace(/&/gm,"&amp;").replace(/</gm,"&lt;")}function f(r,q,p){return RegExp(q,"m"+(r.cI?"i":"")+(p?"g":""))}function b(r){for(var p=0;p<r.childNodes.length;p++){var q=r.childNodes[p];if(q.nodeName=="CODE"){return q}if(!(q.nodeType==3&&q.nodeValue.match(/\s+/))){break}}}function h(t,s){var p="";for(var r=0;r<t.childNodes.length;r++){if(t.childNodes[r].nodeType==3){var q=t.childNodes[r].nodeValue;if(s){q=q.replace(/\n/g,"")}p+=q}else{if(t.childNodes[r].nodeName=="BR"){p+="\n"}else{p+=h(t.childNodes[r])}}}if(/MSIE [678]/.test(navigator.userAgent)){p=p.replace(/\r/g,"\n")}return p}function a(s){var r=s.className.split(/\s+/);r=r.concat(s.parentNode.className.split(/\s+/));for(var q=0;q<r.length;q++){var p=r[q].replace(/^language-/,"");if(e[p]){return p}}}function c(q){var p=[];(function(s,t){for(var r=0;r<s.childNodes.length;r++){if(s.childNodes[r].nodeType==3){t+=s.childNodes[r].nodeValue.length}else{if(s.childNodes[r].nodeName=="BR"){t+=1}else{if(s.childNodes[r].nodeType==1){p.push({event:"start",offset:t,node:s.childNodes[r]});t=arguments.callee(s.childNodes[r],t);p.push({event:"stop",offset:t,node:s.childNodes[r]})}}}}return t})(q,0);return p}function k(y,w,x){var q=0;var z="";var s=[];function u(){if(y.length&&w.length){if(y[0].offset!=w[0].offset){return(y[0].offset<w[0].offset)?y:w}else{return w[0].event=="start"?y:w}}else{return y.length?y:w}}function t(D){var A="<"+D.nodeName.toLowerCase();for(var B=0;B<D.attributes.length;B++){var C=D.attributes[B];A+=" "+C.nodeName.toLowerCase();if(C.value!==undefined&&C.value!==false&&C.value!==null){A+='="'+m(C.value)+'"'}}return A+">"}while(y.length||w.length){var v=u().splice(0,1)[0];z+=m(x.substr(q,v.offset-q));q=v.offset;if(v.event=="start"){z+=t(v.node);s.push(v.node)}else{if(v.event=="stop"){var p,r=s.length;do{r--;p=s[r];z+=("</"+p.nodeName.toLowerCase()+">")}while(p!=v.node);s.splice(r,1);while(r<s.length){z+=t(s[r]);r++}}}}return z+m(x.substr(q))}function j(){function q(x,y,v){if(x.compiled){return}var u;var s=[];if(x.k){x.lR=f(y,x.l||hljs.IR,true);for(var w in x.k){if(!x.k.hasOwnProperty(w)){continue}if(x.k[w] instanceof Object){u=x.k[w]}else{u=x.k;w="keyword"}for(var r in u){if(!u.hasOwnProperty(r)){continue}x.k[r]=[w,u[r]];s.push(r)}}}if(!v){if(x.bWK){x.b="\\b("+s.join("|")+")\\s"}x.bR=f(y,x.b?x.b:"\\B|\\b");if(!x.e&&!x.eW){x.e="\\B|\\b"}if(x.e){x.eR=f(y,x.e)}}if(x.i){x.iR=f(y,x.i)}if(x.r===undefined){x.r=1}if(!x.c){x.c=[]}x.compiled=true;for(var t=0;t<x.c.length;t++){if(x.c[t]=="self"){x.c[t]=x}q(x.c[t],y,false)}if(x.starts){q(x.starts,y,false)}}for(var p in e){if(!e.hasOwnProperty(p)){continue}q(e[p].dM,e[p],true)}}function d(B,C){if(!j.called){j();j.called=true}function q(r,M){for(var L=0;L<M.c.length;L++){if((M.c[L].bR.exec(r)||[null])[0]==r){return M.c[L]}}}function v(L,r){if(D[L].e&&D[L].eR.test(r)){return 1}if(D[L].eW){var M=v(L-1,r);return M?M+1:0}return 0}function w(r,L){return L.i&&L.iR.test(r)}function K(N,O){var M=[];for(var L=0;L<N.c.length;L++){M.push(N.c[L].b)}var r=D.length-1;do{if(D[r].e){M.push(D[r].e)}r--}while(D[r+1].eW);if(N.i){M.push(N.i)}return f(O,M.join("|"),true)}function p(M,L){var N=D[D.length-1];if(!N.t){N.t=K(N,E)}N.t.lastIndex=L;var r=N.t.exec(M);return r?[M.substr(L,r.index-L),r[0],false]:[M.substr(L),"",true]}function z(N,r){var L=E.cI?r[0].toLowerCase():r[0];var M=N.k[L];if(M&&M instanceof Array){return M}return false}function F(L,P){L=m(L);if(!P.k){return L}var r="";var O=0;P.lR.lastIndex=0;var M=P.lR.exec(L);while(M){r+=L.substr(O,M.index-O);var N=z(P,M);if(N){x+=N[1];r+='<span class="'+N[0]+'">'+M[0]+"</span>"}else{r+=M[0]}O=P.lR.lastIndex;M=P.lR.exec(L)}return r+L.substr(O,L.length-O)}function J(L,M){if(M.sL&&e[M.sL]){var r=d(M.sL,L);x+=r.keyword_count;return r.value}else{return F(L,M)}}function I(M,r){var L=M.cN?'<span class="'+M.cN+'">':"";if(M.rB){y+=L;M.buffer=""}else{if(M.eB){y+=m(r)+L;M.buffer=""}else{y+=L;M.buffer=r}}D.push(M);A+=M.r}function G(N,M,Q){var R=D[D.length-1];if(Q){y+=J(R.buffer+N,R);return false}var P=q(M,R);if(P){y+=J(R.buffer+N,R);I(P,M);return P.rB}var L=v(D.length-1,M);if(L){var O=R.cN?"</span>":"";if(R.rE){y+=J(R.buffer+N,R)+O}else{if(R.eE){y+=J(R.buffer+N,R)+O+m(M)}else{y+=J(R.buffer+N+M,R)+O}}while(L>1){O=D[D.length-2].cN?"</span>":"";y+=O;L--;D.length--}var r=D[D.length-1];D.length--;D[D.length-1].buffer="";if(r.starts){I(r.starts,"")}return R.rE}if(w(M,R)){throw"Illegal"}}var E=e[B];var D=[E.dM];var A=0;var x=0;var y="";try{var s,u=0;E.dM.buffer="";do{s=p(C,u);var t=G(s[0],s[1],s[2]);u+=s[0].length;if(!t){u+=s[1].length}}while(!s[2]);if(D.length>1){throw"Illegal"}return{r:A,keyword_count:x,value:y}}catch(H){if(H=="Illegal"){return{r:0,keyword_count:0,value:m(C)}}else{throw H}}}function g(t){var p={keyword_count:0,r:0,value:m(t)};var r=p;for(var q in e){if(!e.hasOwnProperty(q)){continue}var s=d(q,t);s.language=q;if(s.keyword_count+s.r>r.keyword_count+r.r){r=s}if(s.keyword_count+s.r>p.keyword_count+p.r){r=p;p=s}}if(r.language){p.second_best=r}return p}function i(r,q,p){if(q){r=r.replace(/^((<[^>]+>|\t)+)/gm,function(t,w,v,u){return w.replace(/\t/g,q)})}if(p){r=r.replace(/\n/g,"<br>")}return r}function n(t,w,r){var x=h(t,r);var v=a(t);var y,s;if(v){y=d(v,x)}else{return}var q=c(t);if(q.length){s=document.createElement("pre");s.innerHTML=y.value;y.value=k(q,c(s),x)}y.value=i(y.value,w,r);var u=t.className;if(!u.match("(\\s|^)(language-)?"+v+"(\\s|$)")){u=u?(u+" "+v):v}if(/MSIE [678]/.test(navigator.userAgent)&&t.tagName=="CODE"&&t.parentNode.tagName=="PRE"){s=t.parentNode;var p=document.createElement("div");p.innerHTML="<pre><code>"+y.value+"</code></pre>";t=p.firstChild.firstChild;p.firstChild.cN=s.cN;s.parentNode.replaceChild(p.firstChild,s)}else{t.innerHTML=y.value}t.className=u;t.result={language:v,kw:y.keyword_count,re:y.r};if(y.second_best){t.second_best={language:y.second_best.language,kw:y.second_best.keyword_count,re:y.second_best.r}}}function o(){if(o.called){return}o.called=true;var r=document.getElementsByTagName("pre");for(var p=0;p<r.length;p++){var q=b(r[p]);if(q){n(q,hljs.tabReplace)}}}function l(){if(window.addEventListener){window.addEventListener("DOMContentLoaded",o,false);window.addEventListener("load",o,false)}else{if(window.attachEvent){window.attachEvent("onload",o)}else{window.onload=o}}}var e={};this.LANGUAGES=e;this.highlight=d;this.highlightAuto=g;this.fixMarkup=i;this.highlightBlock=n;this.initHighlighting=o;this.initHighlightingOnLoad=l;this.IR="[a-zA-Z][a-zA-Z0-9_]*";this.UIR="[a-zA-Z_][a-zA-Z0-9_]*";this.NR="\\b\\d+(\\.\\d+)?";this.CNR="\\b(0[xX][a-fA-F0-9]+|(\\d+(\\.\\d*)?|\\.\\d+)([eE][-+]?\\d+)?)";this.BNR="\\b(0b[01]+)";this.RSR="!|!=|!==|%|%=|&|&&|&=|\\*|\\*=|\\+|\\+=|,|\\.|-|-=|/|/=|:|;|<|<<|<<=|<=|=|==|===|>|>=|>>|>>=|>>>|>>>=|\\?|\\[|\\{|\\(|\\^|\\^=|\\||\\|=|\\|\\||~";this.ER="(?![\\s\\S])";this.BE={b:"\\\\.",r:0};this.ASM={cN:"string",b:"'",e:"'",i:"\\n",c:[this.BE],r:0};this.QSM={cN:"string",b:'"',e:'"',i:"\\n",c:[this.BE],r:0};this.CLCM={cN:"comment",b:"//",e:"$"};this.CBLCLM={cN:"comment",b:"/\\*",e:"\\*/"};this.HCM={cN:"comment",b:"#",e:"$"};this.NM={cN:"number",b:this.NR,r:0};this.CNM={cN:"number",b:this.CNR,r:0};this.BNM={cN:"number",b:this.BNR,r:0};this.inherit=function(r,s){var p={};for(var q in r){p[q]=r[q]}if(s){for(var q in s){p[q]=s[q]}}return p}}();hljs.LANGUAGES.cpp=function(){var a={keyword:{"false":1,"int":1,"float":1,"while":1,"private":1,"char":1,"catch":1,"export":1,virtual:1,operator:2,sizeof:2,dynamic_cast:2,typedef:2,const_cast:2,"const":1,struct:1,"for":1,static_cast:2,union:1,namespace:1,unsigned:1,"long":1,"throw":1,"volatile":2,"static":1,"protected":1,bool:1,template:1,mutable:1,"if":1,"public":1,friend:2,"do":1,"return":1,"goto":1,auto:1,"void":2,"enum":1,"else":1,"break":1,"new":1,extern:1,using:1,"true":1,"class":1,asm:1,"case":1,typeid:1,"short":1,reinterpret_cast:2,"default":1,"double":1,register:1,explicit:1,signed:1,typename:1,"try":1,"this":1,"switch":1,"continue":1,wchar_t:1,inline:1,"delete":1,alignof:1,char16_t:1,char32_t:1,constexpr:1,decltype:1,noexcept:1,nullptr:1,static_assert:1,thread_local:1,restrict:1,_Bool:1,complex:1},built_in:{std:1,string:1,cin:1,cout:1,cerr:1,clog:1,stringstream:1,istringstream:1,ostringstream:1,auto_ptr:1,deque:1,list:1,queue:1,stack:1,vector:1,map:1,set:1,bitset:1,multiset:1,multimap:1,unordered_set:1,unordered_map:1,unordered_multiset:1,unordered_multimap:1,array:1,shared_ptr:1}};return{dM:{k:a,i:"</",c:[hljs.CLCM,hljs.CBLCLM,hljs.QSM,{cN:"string",b:"'\\\\?.",e:"'",i:"."},{cN:"number",b:"\\b(\\d+(\\.\\d*)?|\\.\\d+)(u|U|l|L|ul|UL|f|F)"},hljs.CNM,{cN:"preprocessor",b:"#",e:"$"},{cN:"stl_container",b:"\\b(deque|list|queue|stack|vector|map|set|bitset|multiset|multimap|unordered_map|unordered_set|unordered_multiset|unordered_multimap|array)\\s*<",e:">",k:a,r:10,c:["self"]}]}}}();hljs.LANGUAGES.r={dM:{c:[hljs.HCM,{cN:"number",b:"\\b0[xX][0-9a-fA-F]+[Li]?\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"number",b:"\\b\\d+(?:[eE][+\\-]?\\d*)?L\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"number",b:"\\b\\d+\\.(?!\\d)(?:i\\b)?",e:hljs.IMMEDIATE_RE,r:1},{cN:"number",b:"\\b\\d+(?:\\.\\d*)?(?:[eE][+\\-]?\\d*)?i?\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"number",b:"\\.\\d+(?:[eE][+\\-]?\\d*)?i?\\b",e:hljs.IMMEDIATE_RE,r:1},{cN:"keyword",b:"(?:tryCatch|library|setGeneric|setGroupGeneric)\\b",e:hljs.IMMEDIATE_RE,r:10},{cN:"keyword",b:"\\.\\.\\.",e:hljs.IMMEDIATE_RE,r:10},{cN:"keyword",b:"\\.\\.\\d+(?![\\w.])",e:hljs.IMMEDIATE_RE,r:10},{cN:"keyword",b:"\\b(?:function)",e:hljs.IMMEDIATE_RE,r:2},{cN:"keyword",b:"(?:if|in|break|next|repeat|else|for|return|switch|while|try|stop|warning|require|attach|detach|source|setMethod|setClass)\\b",e:hljs.IMMEDIATE_RE,r:1},{cN:"literal",b:"(?:NA|NA_integer_|NA_real_|NA_character_|NA_complex_)\\b",e:hljs.IMMEDIATE_RE,r:10},{cN:"literal",b:"(?:NULL|TRUE|FALSE|T|F|Inf|NaN)\\b",e:hljs.IMMEDIATE_RE,r:1},{cN:"identifier",b:"[a-zA-Z.][a-zA-Z0-9._]*\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"operator",b:"<\\-(?!\\s*\\d)",e:hljs.IMMEDIATE_RE,r:2},{cN:"operator",b:"\\->|<\\-",e:hljs.IMMEDIATE_RE,r:1},{cN:"operator",b:"%%|~",e:hljs.IMMEDIATE_RE},{cN:"operator",b:">=|<=|==|!=|\\|\\||&&|=|\\+|\\-|\\*|/|\\^|>|<|!|&|\\||\\$|:",e:hljs.IMMEDIATE_RE,r:0},{cN:"operator",b:"%",e:"%",i:"\\n",r:1},{cN:"identifier",b:"`",e:"`",r:0},{cN:"string",b:'"',e:'"',c:[hljs.BE],r:0},{cN:"string",b:"'",e:"'",c:[hljs.BE],r:0},{cN:"paren",b:"[[({\\])}]",e:hljs.IMMEDIATE_RE,r:0}]}};
+hljs.initHighlightingOnLoad();
+</script>
+
+
+
+
+</head>
+
+<body>
+<h2>Legal Analytics Problem Set 3 - Part 2</h2>
+
+<h2>Andy Ninh</h2>
+
+<hr/>
+
+<h2>Loading the Gapminder data</h2>
+
+<pre><code class="r">gdURL &lt;- &quot;http://www.stat.ubc.ca/~jenny/notOcto/STAT545A/examples/gapminder/data/gapminderDataFiveYear.txt&quot;
+gDat &lt;- read.delim(file = gdURL)
+</code></pre>
+
+<pre><code class="r">str(gDat)
+</code></pre>
+
+<pre><code>## &#39;data.frame&#39;:    1704 obs. of  6 variables:
+##  $ country  : Factor w/ 142 levels &quot;Afghanistan&quot;,..: 1 1 1 1 1 1 1 1 1 1 ...
+##  $ year     : int  1952 1957 1962 1967 1972 1977 1982 1987 1992 1997 ...
+##  $ pop      : num  8425333 9240934 10267083 11537966 13079460 ...
+##  $ continent: Factor w/ 5 levels &quot;Africa&quot;,&quot;Americas&quot;,..: 3 3 3 3 3 3 3 3 3 3 ...
+##  $ lifeExp  : num  28.8 30.3 32 34 36.1 ...
+##  $ gdpPercap: num  779 821 853 836 740 ...
+</code></pre>
+
+<h2>Storing a snippet of the data</h2>
+
+<pre><code class="r">(snippet &lt;- subset(gDat, country == &quot;Canada&quot;))
+</code></pre>
+
+<pre><code>##     country year      pop continent lifeExp gdpPercap
+## 241  Canada 1952 14785584  Americas   68.75     11367
+## 242  Canada 1957 17010154  Americas   69.96     12490
+## 243  Canada 1962 18985849  Americas   71.30     13462
+## 244  Canada 1967 20819767  Americas   72.13     16077
+## 245  Canada 1972 22284500  Americas   72.88     18971
+## 246  Canada 1977 23796400  Americas   74.21     22091
+## 247  Canada 1982 25201900  Americas   75.76     22899
+## 248  Canada 1987 26549700  Americas   76.86     26627
+## 249  Canada 1992 28523502  Americas   77.95     26343
+## 250  Canada 1997 30305843  Americas   78.61     28955
+## 251  Canada 2002 31902268  Americas   79.77     33329
+## 252  Canada 2007 33390141  Americas   80.65     36319
+</code></pre>
+
+<h2>Installing and Loading plyr</h2>
+
+<pre><code class="r">install.packages(&quot;plyr&quot;, dependencies = TRUE)
+</code></pre>
+
+<pre><code>## Error: trying to use CRAN without setting a mirror
+</code></pre>
+
+<pre><code class="r">library(plyr)
+</code></pre>
+
+<h2>Using ddply to find the maximum life expentency of each continent</h2>
+
+<pre><code class="r">(maxLeByCont &lt;- ddply(gDat, ~continent, summarize, maxLifeExp = max(lifeExp)))
+</code></pre>
+
+<pre><code>##   continent maxLifeExp
+## 1    Africa      76.44
+## 2  Americas      80.65
+## 3      Asia      82.60
+## 4    Europe      81.76
+## 5   Oceania      81.23
+</code></pre>
+
+<h2>Studying the return value</h2>
+
+<pre><code class="r">str(maxLeByCont)
+</code></pre>
+
+<pre><code>## &#39;data.frame&#39;:    5 obs. of  2 variables:
+##  $ continent : Factor w/ 5 levels &quot;Africa&quot;,&quot;Americas&quot;,..: 1 2 3 4 5
+##  $ maxLifeExp: num  76.4 80.7 82.6 81.8 81.2
+</code></pre>
+
+<pre><code class="r">levels(maxLeByCont$continent)
+</code></pre>
+
+<pre><code>## [1] &quot;Africa&quot;   &quot;Americas&quot; &quot;Asia&quot;     &quot;Europe&quot;   &quot;Oceania&quot;
+</code></pre>
+
+<h2>Computing the minimum GDP per capita by continent</h2>
+
+<pre><code class="r">(mingdpPercap &lt;- ddply(gDat, ~continent, summarize, minGDPperCap = min(gdpPercap)))
+</code></pre>
+
+<pre><code>##   continent minGDPperCap
+## 1    Africa        241.2
+## 2  Americas       1201.6
+## 3      Asia        331.0
+## 4    Europe        973.5
+## 5   Oceania      10039.6
+</code></pre>
+
+<h2>Counting the number of countries in the data set</h2>
+
+<pre><code class="r">ddply(gDat, ~continent, summarize, nUniqCountries = length(unique(country)))
+</code></pre>
+
+<pre><code>##   continent nUniqCountries
+## 1    Africa             52
+## 2  Americas             25
+## 3      Asia             33
+## 4    Europe             30
+## 5   Oceania              2
+</code></pre>
+
+<h2>Alternate method without using summarize()</h2>
+
+<pre><code class="r">ddply(gDat, ~continent, function(x) return(c(nUniqCountries = length(unique(x$country)))))
+</code></pre>
+
+<pre><code>##   continent nUniqCountries
+## 1    Africa             52
+## 2  Americas             25
+## 3      Asia             33
+## 4    Europe             30
+## 5   Oceania              2
+</code></pre>
+
+<h2>You can compute multiple things per sub-data.frame</h2>
+
+<pre><code class="r">ddply(gDat, ~continent, summarize, minLifeExp = min(lifeExp), maxLifeExp = max(lifeExp), 
+    medGdpPercap = median(gdpPercap))
+</code></pre>
+
+<pre><code>##   continent minLifeExp maxLifeExp medGdpPercap
+## 1    Africa      23.60      76.44         1192
+## 2  Americas      37.58      80.65         5466
+## 3      Asia      28.80      82.60         2647
+## 4    Europe      43.59      81.76        12082
+## 5   Oceania      69.12      81.23        17983
+</code></pre>
+
+<h1>Putting it all together using ddply()</h1>
+
+<pre><code class="r">jCountry &lt;- &quot;France&quot;  # pick, but do not hard wire, an example
+(jDat &lt;- subset(gDat, country == jCountry))  # temporary measure!
+</code></pre>
+
+<pre><code>##     country year      pop continent lifeExp gdpPercap
+## 529  France 1952 42459667    Europe   67.41      7030
+## 530  France 1957 44310863    Europe   68.93      8663
+## 531  France 1962 47124000    Europe   70.51     10560
+## 532  France 1967 49569000    Europe   71.55     13000
+## 533  France 1972 51732000    Europe   72.38     16107
+## 534  France 1977 53165019    Europe   73.83     18293
+## 535  France 1982 54433565    Europe   74.89     20294
+## 536  France 1987 55630100    Europe   76.34     22066
+## 537  France 1992 57374179    Europe   77.46     24704
+## 538  France 1997 58623428    Europe   78.64     25890
+## 539  France 2002 59925035    Europe   79.59     28926
+## 540  France 2007 61083916    Europe   80.66     30470
+</code></pre>
+
+<h2>Installing and loading lattice for plotting graphics</h2>
+
+<pre><code class="r">install.packages(&quot;lattice&quot;)
+</code></pre>
+
+<pre><code>## Error: trying to use CRAN without setting a mirror
+</code></pre>
+
+<pre><code class="r">library(lattice)
+</code></pre>
+
+<h2>Plotting the data</h2>
+
+<pre><code class="r">xyplot(lifeExp ~ year, jDat, type = c(&quot;p&quot;, &quot;r&quot;))  # always plot the data
+</code></pre>
+
+<p><img src="data:image/png;base64,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" alt="plot of chunk unnamed-chunk-13"/> </p>
+
+<pre><code class="r">jFit &lt;- lm(lifeExp ~ year, jDat)
+summary(jFit)
+</code></pre>
+
+<pre><code>## 
+## Call:
+## lm(formula = lifeExp ~ year, data = jDat)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -0.3801 -0.1389  0.0124  0.1429  0.3349 
+## 
+## Coefficients:
+##              Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept) -3.98e+02   7.29e+00   -54.6  1.0e-13 ***
+## year         2.38e-01   3.68e-03    64.8  1.9e-14 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 0.22 on 10 degrees of freedom
+## Multiple R-squared:  0.998,  Adjusted R-squared:  0.997 
+## F-statistic: 4.2e+03 on 1 and 10 DF,  p-value: 1.86e-14
+</code></pre>
+
+<h2>Adjusting for fit</h2>
+
+<pre><code class="r">(yearMin &lt;- min(gDat$year))
+</code></pre>
+
+<pre><code>## [1] 1952
+</code></pre>
+
+<pre><code class="r">jFit &lt;- lm(lifeExp ~ I(year - yearMin), jDat)
+summary(jFit)
+</code></pre>
+
+<pre><code>## 
+## Call:
+## lm(formula = lifeExp ~ I(year - yearMin), data = jDat)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -0.3801 -0.1389  0.0124  0.1429  0.3349 
+## 
+## Coefficients:
+##                   Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)       67.79013    0.11949   567.3  &lt; 2e-16 ***
+## I(year - yearMin)  0.23850    0.00368    64.8  1.9e-14 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 0.22 on 10 degrees of freedom
+## Multiple R-squared:  0.998,  Adjusted R-squared:  0.997 
+## F-statistic: 4.2e+03 on 1 and 10 DF,  p-value: 1.86e-14
+</code></pre>
+
+<pre><code class="r">## The intercept is around 68. This makes much more sense. So, what is jFit
+## and what can we get out of it?
+class(jFit)
+</code></pre>
+
+<pre><code>## [1] &quot;lm&quot;
+</code></pre>
+
+<pre><code class="r">mode(jFit)
+</code></pre>
+
+<pre><code>## [1] &quot;list&quot;
+</code></pre>
+
+<pre><code class="r">## So, jFit is of class &#39;lm&#39; and its mode is list. So that means I could use
+## indexing to isolate specific components. But what&#39;s in there?
+</code></pre>
+
+<pre><code class="r">## str(jFit) # too ugly to print here but you should look
+names(jFit)
+</code></pre>
+
+<pre><code>##  [1] &quot;coefficients&quot;  &quot;residuals&quot;     &quot;effects&quot;       &quot;rank&quot;         
+##  [5] &quot;fitted.values&quot; &quot;assign&quot;        &quot;qr&quot;            &quot;df.residual&quot;  
+##  [9] &quot;xlevels&quot;       &quot;call&quot;          &quot;terms&quot;         &quot;model&quot;
+</code></pre>
+
+<pre><code class="r">jFit$coefficients
+</code></pre>
+
+<pre><code>##       (Intercept) I(year - yearMin) 
+##           67.7901            0.2385
+</code></pre>
+
+<pre><code class="r">## Using str() and names() reveals a great deal about this &#39;lm&#39; object and
+## reading the help file for lm() would explain a great deal more. In the See
+## Also section we learn there&#39;s a generic function coef() which looks
+## promising.
+coef(jFit)
+</code></pre>
+
+<pre><code>##       (Intercept) I(year - yearMin) 
+##           67.7901            0.2385
+</code></pre>
+
+<pre><code class="r">## We have achieved our goal for this specific country -- we&#39;ve gotten its
+## intercept and slope. Now we need to package that as a function.
+jFun &lt;- function(x) coef(lm(lifeExp ~ I(year - yearMin), x))
+jFun(jDat)  # trying out our new function ... yes still get same numbers
+</code></pre>
+
+<pre><code>##       (Intercept) I(year - yearMin) 
+##           67.7901            0.2385
+</code></pre>
+
+<h2>Changing the names of the return values</h2>
+
+<pre><code class="r">jFun &lt;- function(x) {
+    estCoefs &lt;- coef(lm(lifeExp ~ I(year - yearMin), x))
+    names(estCoefs) &lt;- c(&quot;intercept&quot;, &quot;slope&quot;)
+    return(estCoefs)
+}
+jFun(jDat)  # trying out our improved function ... yes still get same numbers
+</code></pre>
+
+<pre><code>## intercept     slope 
+##   67.7901    0.2385
+</code></pre>
+
+<h2>Testing the new function on some examples</h2>
+
+<pre><code class="r">jFun(subset(gDat, country == &quot;Canada&quot;))
+</code></pre>
+
+<pre><code>## intercept     slope 
+##   68.8838    0.2189
+</code></pre>
+
+<pre><code class="r">jFun(subset(gDat, country == &quot;Uruguay&quot;))
+</code></pre>
+
+<pre><code>## intercept     slope 
+##   65.7416    0.1833
+</code></pre>
+
+<pre><code class="r">jFun(subset(gDat, country == &quot;India&quot;))
+</code></pre>
+
+<pre><code>## intercept     slope 
+##   39.2698    0.5053
+</code></pre>
+
+<pre><code class="r">jFun(subset(gDat, country == &quot;Japan&quot;))
+</code></pre>
+
+<pre><code>## intercept     slope 
+##   65.1221    0.3529
+</code></pre>
+
+<pre><code class="r">jFun(subset(gDat, country == &quot;Iceland&quot;))
+</code></pre>
+
+<pre><code>## intercept     slope 
+##   71.9636    0.1654
+</code></pre>
+
+<h2>Scaling up &ndash; Placing the function inside ddply()</h2>
+
+<pre><code class="r">jCoefs &lt;- ddply(gDat, ~country, jFun)
+str(jCoefs)
+</code></pre>
+
+<pre><code>## &#39;data.frame&#39;:    142 obs. of  3 variables:
+##  $ country  : Factor w/ 142 levels &quot;Afghanistan&quot;,..: 1 2 3 4 5 6 7 8 9 10 ...
+##  $ intercept: num  29.9 59.2 43.4 32.1 62.7 ...
+##  $ slope    : num  0.275 0.335 0.569 0.209 0.232 ...
+</code></pre>
+
+<pre><code class="r">tail(jCoefs)
+</code></pre>
+
+<pre><code>##                country intercept    slope
+## 137          Venezuela     57.51  0.32972
+## 138            Vietnam     39.01  0.67162
+## 139 West Bank and Gaza     43.80  0.60110
+## 140        Yemen, Rep.     30.13  0.60546
+## 141             Zambia     47.66 -0.06043
+## 142           Zimbabwe     55.22 -0.09302
+</code></pre>
+
+<h1>Review: This would be the final script</h1>
+
+<pre><code class="r">## realistically, you would read the data from a local file
+gdURL &lt;- &quot;http://www.stat.ubc.ca/~jenny/notOcto/STAT545A/examples/gapminder/data/gapminderDataFiveYear.txt&quot;
+gDat &lt;- read.delim(file = gdURL)
+## str(gDat) here when working interactively
+yearMin &lt;- min(gDat$year)
+jFun &lt;- function(x) {
+    estCoefs &lt;- coef(lm(lifeExp ~ I(year - yearMin), x))
+    names(estCoefs) &lt;- c(&quot;intercept&quot;, &quot;slope&quot;)
+    return(estCoefs)
+}
+## jFun(subset(gDat, country == &#39;India&#39;)) to see what it does
+jCoefs &lt;- ddply(gDat, ~country, jFun)
+</code></pre>
+
+<h2>Installing and loading xtable</h2>
+
+<pre><code class="r">install.packages(&quot;xtable&quot;, dependencies = TRUE)
+</code></pre>
+
+<pre><code>## Error: trying to use CRAN without setting a mirror
+</code></pre>
+
+<pre><code class="r">library(xtable)
+</code></pre>
+
+<h2>Pick some countries at random and display their estimated coefficients</h2>
+
+<pre><code class="r">set.seed(916)
+foo &lt;- jCoefs[sample(nrow(jCoefs), size = 15), ]
+foo &lt;- xtable(foo)
+print(foo, type = &quot;html&quot;, include.rownames = FALSE)
+</code></pre>
+
+<pre><code>## &lt;!-- html table generated in R 3.0.2 by xtable 1.7-1 package --&gt;
+## &lt;!-- Sun Apr  6 21:50:19 2014 --&gt;
+## &lt;TABLE border=1&gt;
+## &lt;TR&gt; &lt;TH&gt; country &lt;/TH&gt; &lt;TH&gt; intercept &lt;/TH&gt; &lt;TH&gt; slope &lt;/TH&gt;  &lt;/TR&gt;
+##   &lt;TR&gt; &lt;TD&gt; Lebanon &lt;/TD&gt; &lt;TD align=&quot;right&quot;&gt; 58.69 &lt;/TD&gt; &lt;TD align=&quot;right&quot;&gt; 0.26 &lt;/TD&gt; &lt;/TR&gt;
+##   &lt;TR&gt; &lt;TD&gt; Senegal &lt;/TD&gt; &lt;TD align=&quot;right&quot;&gt; 36.75 &lt;/TD&gt; &lt;TD align=&quot;right&quot;&gt; 0.50 &lt;/TD&gt; &lt;/TR&gt;
+##   &lt;TR&gt; &lt;TD&gt; Dominican Republic &lt;/TD&gt; &lt;TD align=&quot;right&quot;&gt; 48.60 &lt;/TD&gt; &lt;TD align=&quot;right&quot;&gt; 0.47 &lt;/TD&gt; &lt;/TR&gt;
+##   &lt;TR&gt; &lt;TD&gt; Oman &lt;/TD&gt; &lt;TD align=&quot;right&quot;&gt; 37.21 &lt;/TD&gt; &lt;TD align=&quot;right&quot;&gt; 0.77 &lt;/TD&gt; &lt;/TR&gt;
+##   &lt;TR&gt; &lt;TD&gt; Germany &lt;/TD&gt; &lt;TD align=&quot;right&quot;&gt; 67.57 &lt;/TD&gt; &lt;TD align=&quot;right&quot;&gt; 0.21 &lt;/TD&gt; &lt;/TR&gt;
+##   &lt;TR&gt; &lt;TD&gt; Korea, Dem. Rep. &lt;/TD&gt; &lt;TD align=&quot;right&quot;&gt; 54.91 &lt;/TD&gt; &lt;TD align=&quot;right&quot;&gt; 0.32 &lt;/TD&gt; &lt;/TR&gt;
+##   &lt;TR&gt; &lt;TD&gt; Mauritius &lt;/TD&gt; &lt;TD align=&quot;right&quot;&gt; 55.37 &lt;/TD&gt; &lt;TD align=&quot;right&quot;&gt; 0.35 &lt;/TD&gt; &lt;/TR&gt;
+##   &lt;TR&gt; &lt;TD&gt; Slovak Republic &lt;/TD&gt; &lt;TD align=&quot;right&quot;&gt; 67.01 &lt;/TD&gt; &lt;TD align=&quot;right&quot;&gt; 0.13 &lt;/TD&gt; &lt;/TR&gt;
+##   &lt;TR&gt; &lt;TD&gt; Comoros &lt;/TD&gt; &lt;TD align=&quot;right&quot;&gt; 40.00 &lt;/TD&gt; &lt;TD align=&quot;right&quot;&gt; 0.45 &lt;/TD&gt; &lt;/TR&gt;
+##   &lt;TR&gt; &lt;TD&gt; Argentina &lt;/TD&gt; &lt;TD align=&quot;right&quot;&gt; 62.69 &lt;/TD&gt; &lt;TD align=&quot;right&quot;&gt; 0.23 &lt;/TD&gt; &lt;/TR&gt;
+##   &lt;TR&gt; &lt;TD&gt; Central African Republic &lt;/TD&gt; &lt;TD align=&quot;right&quot;&gt; 38.81 &lt;/TD&gt; &lt;TD align=&quot;right&quot;&gt; 0.18 &lt;/TD&gt; &lt;/TR&gt;
+##   &lt;TR&gt; &lt;TD&gt; Ecuador &lt;/TD&gt; &lt;TD align=&quot;right&quot;&gt; 49.07 &lt;/TD&gt; &lt;TD align=&quot;right&quot;&gt; 0.50 &lt;/TD&gt; &lt;/TR&gt;
+##   &lt;TR&gt; &lt;TD&gt; West Bank and Gaza &lt;/TD&gt; &lt;TD align=&quot;right&quot;&gt; 43.80 &lt;/TD&gt; &lt;TD align=&quot;right&quot;&gt; 0.60 &lt;/TD&gt; &lt;/TR&gt;
+##   &lt;TR&gt; &lt;TD&gt; Egypt &lt;/TD&gt; &lt;TD align=&quot;right&quot;&gt; 40.97 &lt;/TD&gt; &lt;TD align=&quot;right&quot;&gt; 0.56 &lt;/TD&gt; &lt;/TR&gt;
+##   &lt;TR&gt; &lt;TD&gt; Myanmar &lt;/TD&gt; &lt;TD align=&quot;right&quot;&gt; 41.41 &lt;/TD&gt; &lt;TD align=&quot;right&quot;&gt; 0.43 &lt;/TD&gt; &lt;/TR&gt;
+##    &lt;/TABLE&gt;
+</code></pre>
+
+<pre><code class="r">## Two easy improvements: include the continent informaiton and sort
+## rationally
+jCoefs &lt;- ddply(gDat, ~country + continent, jFun)
+str(jCoefs)
+</code></pre>
+
+<pre><code>## &#39;data.frame&#39;:    142 obs. of  4 variables:
+##  $ country  : Factor w/ 142 levels &quot;Afghanistan&quot;,..: 1 2 3 4 5 6 7 8 9 10 ...
+##  $ continent: Factor w/ 5 levels &quot;Africa&quot;,&quot;Americas&quot;,..: 3 4 1 1 2 5 4 3 3 4 ...
+##  $ intercept: num  29.9 59.2 43.4 32.1 62.7 ...
+##  $ slope    : num  0.275 0.335 0.569 0.209 0.232 ...
+</code></pre>
+
+<pre><code class="r">tail(jCoefs)
+</code></pre>
+
+<pre><code>##                country continent intercept    slope
+## 137          Venezuela  Americas     57.51  0.32972
+## 138            Vietnam      Asia     39.01  0.67162
+## 139 West Bank and Gaza      Asia     43.80  0.60110
+## 140        Yemen, Rep.      Asia     30.13  0.60546
+## 141             Zambia    Africa     47.66 -0.06043
+## 142           Zimbabwe    Africa     55.22 -0.09302
+</code></pre>
+
+<pre><code class="r">## Now, prior to making the HTML table, we will sort the data.frame, so it
+## starts with the country with the shortest life expectancy in 1952, and
+## goes to the largest.
+set.seed(916)
+foo &lt;- jCoefs[sample(nrow(jCoefs), size = 15), ]
+foo &lt;- arrange(foo, intercept)
+## foo &lt;- foo[order(foo$intercept), ] # an uglier non-plyr way
+foo &lt;- xtable(foo)
+print(foo, type = &quot;html&quot;, include.rownames = FALSE)
+</code></pre>
+
+<pre><code>## &lt;!-- html table generated in R 3.0.2 by xtable 1.7-1 package --&gt;
+## &lt;!-- Sun Apr  6 21:50:20 2014 --&gt;
+## &lt;TABLE border=1&gt;
+## &lt;TR&gt; &lt;TH&gt; country &lt;/TH&gt; &lt;TH&gt; continent &lt;/TH&gt; &lt;TH&gt; intercept &lt;/TH&gt; &lt;TH&gt; slope &lt;/TH&gt;  &lt;/TR&gt;
+##   &lt;TR&gt; &lt;TD&gt; Senegal &lt;/TD&gt; &lt;TD&gt; Africa &lt;/TD&gt; &lt;TD align=&quot;right&quot;&gt; 36.75 &lt;/TD&gt; &lt;TD align=&quot;right&quot;&gt; 0.50 &lt;/TD&gt; &lt;/TR&gt;
+##   &lt;TR&gt; &lt;TD&gt; Oman &lt;/TD&gt; &lt;TD&gt; Asia &lt;/TD&gt; &lt;TD align=&quot;right&quot;&gt; 37.21 &lt;/TD&gt; &lt;TD align=&quot;right&quot;&gt; 0.77 &lt;/TD&gt; &lt;/TR&gt;
+##   &lt;TR&gt; &lt;TD&gt; Central African Republic &lt;/TD&gt; &lt;TD&gt; Africa &lt;/TD&gt; &lt;TD align=&quot;right&quot;&gt; 38.81 &lt;/TD&gt; &lt;TD align=&quot;right&quot;&gt; 0.18 &lt;/TD&gt; &lt;/TR&gt;
+##   &lt;TR&gt; &lt;TD&gt; Comoros &lt;/TD&gt; &lt;TD&gt; Africa &lt;/TD&gt; &lt;TD align=&quot;right&quot;&gt; 40.00 &lt;/TD&gt; &lt;TD align=&quot;right&quot;&gt; 0.45 &lt;/TD&gt; &lt;/TR&gt;
+##   &lt;TR&gt; &lt;TD&gt; Egypt &lt;/TD&gt; &lt;TD&gt; Africa &lt;/TD&gt; &lt;TD align=&quot;right&quot;&gt; 40.97 &lt;/TD&gt; &lt;TD align=&quot;right&quot;&gt; 0.56 &lt;/TD&gt; &lt;/TR&gt;
+##   &lt;TR&gt; &lt;TD&gt; Myanmar &lt;/TD&gt; &lt;TD&gt; Asia &lt;/TD&gt; &lt;TD align=&quot;right&quot;&gt; 41.41 &lt;/TD&gt; &lt;TD align=&quot;right&quot;&gt; 0.43 &lt;/TD&gt; &lt;/TR&gt;
+##   &lt;TR&gt; &lt;TD&gt; West Bank and Gaza &lt;/TD&gt; &lt;TD&gt; Asia &lt;/TD&gt; &lt;TD align=&quot;right&quot;&gt; 43.80 &lt;/TD&gt; &lt;TD align=&quot;right&quot;&gt; 0.60 &lt;/TD&gt; &lt;/TR&gt;
+##   &lt;TR&gt; &lt;TD&gt; Dominican Republic &lt;/TD&gt; &lt;TD&gt; Americas &lt;/TD&gt; &lt;TD align=&quot;right&quot;&gt; 48.60 &lt;/TD&gt; &lt;TD align=&quot;right&quot;&gt; 0.47 &lt;/TD&gt; &lt;/TR&gt;
+##   &lt;TR&gt; &lt;TD&gt; Ecuador &lt;/TD&gt; &lt;TD&gt; Americas &lt;/TD&gt; &lt;TD align=&quot;right&quot;&gt; 49.07 &lt;/TD&gt; &lt;TD align=&quot;right&quot;&gt; 0.50 &lt;/TD&gt; &lt;/TR&gt;
+##   &lt;TR&gt; &lt;TD&gt; Korea, Dem. Rep. &lt;/TD&gt; &lt;TD&gt; Asia &lt;/TD&gt; &lt;TD align=&quot;right&quot;&gt; 54.91 &lt;/TD&gt; &lt;TD align=&quot;right&quot;&gt; 0.32 &lt;/TD&gt; &lt;/TR&gt;
+##   &lt;TR&gt; &lt;TD&gt; Mauritius &lt;/TD&gt; &lt;TD&gt; Africa &lt;/TD&gt; &lt;TD align=&quot;right&quot;&gt; 55.37 &lt;/TD&gt; &lt;TD align=&quot;right&quot;&gt; 0.35 &lt;/TD&gt; &lt;/TR&gt;
+##   &lt;TR&gt; &lt;TD&gt; Lebanon &lt;/TD&gt; &lt;TD&gt; Asia &lt;/TD&gt; &lt;TD align=&quot;right&quot;&gt; 58.69 &lt;/TD&gt; &lt;TD align=&quot;right&quot;&gt; 0.26 &lt;/TD&gt; &lt;/TR&gt;
+##   &lt;TR&gt; &lt;TD&gt; Argentina &lt;/TD&gt; &lt;TD&gt; Americas &lt;/TD&gt; &lt;TD align=&quot;right&quot;&gt; 62.69 &lt;/TD&gt; &lt;TD align=&quot;right&quot;&gt; 0.23 &lt;/TD&gt; &lt;/TR&gt;
+##   &lt;TR&gt; &lt;TD&gt; Slovak Republic &lt;/TD&gt; &lt;TD&gt; Europe &lt;/TD&gt; &lt;TD align=&quot;right&quot;&gt; 67.01 &lt;/TD&gt; &lt;TD align=&quot;right&quot;&gt; 0.13 &lt;/TD&gt; &lt;/TR&gt;
+##   &lt;TR&gt; &lt;TD&gt; Germany &lt;/TD&gt; &lt;TD&gt; Europe &lt;/TD&gt; &lt;TD align=&quot;right&quot;&gt; 67.57 &lt;/TD&gt; &lt;TD align=&quot;right&quot;&gt; 0.21 &lt;/TD&gt; &lt;/TR&gt;
+##    &lt;/TABLE&gt;
+</code></pre>
+
+<h1>jFun only requires one argument, x. What if it had more than one argument?</h1>
+
+<pre><code class="r">jFunTwoArgs &lt;- function(x, cvShift = 0) {
+    estCoefs &lt;- coef(lm(lifeExp ~ I(year - cvShift), x))
+    names(estCoefs) &lt;- c(&quot;intercept&quot;, &quot;slope&quot;)
+    return(estCoefs)
+}
+jCoefsSilly &lt;- ddply(gDat, ~country, jFunTwoArgs)
+head(jCoefsSilly)
+</code></pre>
+
+<pre><code>##       country intercept  slope
+## 1 Afghanistan    -507.5 0.2753
+## 2     Albania    -594.1 0.3347
+## 3     Algeria   -1067.9 0.5693
+## 4      Angola    -376.5 0.2093
+## 5   Argentina    -389.6 0.2317
+## 6   Australia    -376.1 0.2277
+</code></pre>
+
+<pre><code class="r">## We are getting the same estimated slopes but the silly year 0 intercepts
+## we&#39;ve seen before. Let&#39;s use the cvShift = argument to resolve this.
+jCoefsSane &lt;- ddply(gDat, ~country, jFunTwoArgs, cvShift = 1952)
+head(jCoefsSane)
+</code></pre>
+
+<pre><code>##       country intercept  slope
+## 1 Afghanistan     29.91 0.2753
+## 2     Albania     59.23 0.3347
+## 3     Algeria     43.37 0.5693
+## 4      Angola     32.13 0.2093
+## 5   Argentina     62.69 0.2317
+## 6   Australia     68.40 0.2277
+</code></pre>
+
+<pre><code class="r">## We&#39;re back to our usual estimated intercepts, which reflect life
+## expectancy in 1952. Of course hard-wiring 1952 is not a great idea, so
+## here&#39;s probably our best code yet:
+jCoefsBest &lt;- ddply(gDat, ~country, jFunTwoArgs, cvShift = min(gDat$year))
+head(jCoefsBest)
+</code></pre>
+
+<pre><code>##       country intercept  slope
+## 1 Afghanistan     29.91 0.2753
+## 2     Albania     59.23 0.3347
+## 3     Algeria     43.37 0.5693
+## 4      Angola     32.13 0.2093
+## 5   Argentina     62.69 0.2317
+## 6   Australia     68.40 0.2277
+</code></pre>
+
+</body>
+
+</html>
+
