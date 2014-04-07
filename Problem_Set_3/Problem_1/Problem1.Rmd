@@ -1,19 +1,22 @@
 Legal Analytics Problem Set 3 - Part 1
-========================================================
+-----------------------------------------------------------------------------
 ## Andy Ninh - 2014
-========================================================
+-----------------------------------------------------------------------------
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring web pages (click the **Help** toolbar button for more details on using R Markdown).
+# Binary Classification – A Comparison of “Titanic” Proportions Between Logistic Regression, Random Forests, and Conditional Trees
 
-When you click the **Knit HTML** button a web page will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+The dataset I used contains records of the survival of Titanic Passengers and such information as sex, age, fare each person paid, number of parents/children aboard, number of siblings or spouses aboard, passenger class and other fields (The titanic dataset can be retrieved from a <a href="http://biostat.mc.vanderbilt.edu/twiki/bin/view/Main/DataSets">page on Vanderbilt’s website </a> replete with lots of datasets; look for “titanic3″).
 
+I took one part of the dataset to train my models, and another part to test them.  The factors that I focused on were passenger class, sex, age, and number of siblings/spouses aboard.
+
+First, let’s look at the GLM:
 ```{r}
-summary(cars)
+titanic.train <- read.csv("titanic3.csv", header=TRUE)
+titanic.survival.train = glm(survived ~ pclass + sex + pclass:sex + age + sibsp,
+family = binomial(logit), data = titanic.train)
 ```
 
-You can also embed plots, for example:
-
-```{r fig.width=7, fig.height=6}
-plot(cars)
+As you can see, I worked in an interaction effect between passenger class and sex, as passenger class showed a much bigger difference in survival rate amongst the women compared to the men (i.e. Higher class women were much more likely to survive than lower class women, whereas first class Men were more likely to survive than 2nd or 3rd class men, but not by the same margin as amongst the women).  Following is the model summary output, if you’re interested:
+```{r}
+summary(titanic.survival.train)
 ```
-
