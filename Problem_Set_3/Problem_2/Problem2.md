@@ -485,8 +485,8 @@ print(foo, type = "html", include.rownames = FALSE)
 ```
 
 ```
-## <!-- html table generated in R 3.0.2 by xtable 1.7-1 package -->
-## <!-- Sun Apr  6 21:50:19 2014 -->
+## <!-- html table generated in R 3.0.2 by xtable 1.7-3 package -->
+## <!-- Mon Apr  7 00:05:27 2014 -->
 ## <TABLE border=1>
 ## <TR> <TH> country </TH> <TH> intercept </TH> <TH> slope </TH>  </TR>
 ##   <TR> <TD> Lebanon </TD> <TD align="right"> 58.69 </TD> <TD align="right"> 0.26 </TD> </TR>
@@ -549,8 +549,8 @@ print(foo, type = "html", include.rownames = FALSE)
 ```
 
 ```
-## <!-- html table generated in R 3.0.2 by xtable 1.7-1 package -->
-## <!-- Sun Apr  6 21:50:20 2014 -->
+## <!-- html table generated in R 3.0.2 by xtable 1.7-3 package -->
+## <!-- Mon Apr  7 00:05:28 2014 -->
 ## <TABLE border=1>
 ## <TR> <TH> country </TH> <TH> continent </TH> <TH> intercept </TH> <TH> slope </TH>  </TR>
 ##   <TR> <TD> Senegal </TD> <TD> Africa </TD> <TD align="right"> 36.75 </TD> <TD align="right"> 0.50 </TD> </TR>
