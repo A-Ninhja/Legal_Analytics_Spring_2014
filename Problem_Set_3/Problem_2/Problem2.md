@@ -484,32 +484,30 @@ foo <- xtable(foo)
 print(foo, type = "html", include.rownames = FALSE)
 ```
 
-```
-## <!-- html table generated in R 3.0.2 by xtable 1.7-3 package -->
-## <!-- Mon Apr  7 00:05:27 2014 -->
-## <TABLE border=1>
-## <TR> <TH> country </TH> <TH> intercept </TH> <TH> slope </TH>  </TR>
-##   <TR> <TD> Lebanon </TD> <TD align="right"> 58.69 </TD> <TD align="right"> 0.26 </TD> </TR>
-##   <TR> <TD> Senegal </TD> <TD align="right"> 36.75 </TD> <TD align="right"> 0.50 </TD> </TR>
-##   <TR> <TD> Dominican Republic </TD> <TD align="right"> 48.60 </TD> <TD align="right"> 0.47 </TD> </TR>
-##   <TR> <TD> Oman </TD> <TD align="right"> 37.21 </TD> <TD align="right"> 0.77 </TD> </TR>
-##   <TR> <TD> Germany </TD> <TD align="right"> 67.57 </TD> <TD align="right"> 0.21 </TD> </TR>
-##   <TR> <TD> Korea, Dem. Rep. </TD> <TD align="right"> 54.91 </TD> <TD align="right"> 0.32 </TD> </TR>
-##   <TR> <TD> Mauritius </TD> <TD align="right"> 55.37 </TD> <TD align="right"> 0.35 </TD> </TR>
-##   <TR> <TD> Slovak Republic </TD> <TD align="right"> 67.01 </TD> <TD align="right"> 0.13 </TD> </TR>
-##   <TR> <TD> Comoros </TD> <TD align="right"> 40.00 </TD> <TD align="right"> 0.45 </TD> </TR>
-##   <TR> <TD> Argentina </TD> <TD align="right"> 62.69 </TD> <TD align="right"> 0.23 </TD> </TR>
-##   <TR> <TD> Central African Republic </TD> <TD align="right"> 38.81 </TD> <TD align="right"> 0.18 </TD> </TR>
-##   <TR> <TD> Ecuador </TD> <TD align="right"> 49.07 </TD> <TD align="right"> 0.50 </TD> </TR>
-##   <TR> <TD> West Bank and Gaza </TD> <TD align="right"> 43.80 </TD> <TD align="right"> 0.60 </TD> </TR>
-##   <TR> <TD> Egypt </TD> <TD align="right"> 40.97 </TD> <TD align="right"> 0.56 </TD> </TR>
-##   <TR> <TD> Myanmar </TD> <TD align="right"> 41.41 </TD> <TD align="right"> 0.43 </TD> </TR>
-##    </TABLE>
-```
+<!-- html table generated in R 3.0.2 by xtable 1.7-3 package -->
+<!-- Mon Apr  7 00:30:45 2014 -->
+<TABLE border=1>
+<TR> <TH> country </TH> <TH> intercept </TH> <TH> slope </TH>  </TR>
+  <TR> <TD> Lebanon </TD> <TD align="right"> 58.69 </TD> <TD align="right"> 0.26 </TD> </TR>
+  <TR> <TD> Senegal </TD> <TD align="right"> 36.75 </TD> <TD align="right"> 0.50 </TD> </TR>
+  <TR> <TD> Dominican Republic </TD> <TD align="right"> 48.60 </TD> <TD align="right"> 0.47 </TD> </TR>
+  <TR> <TD> Oman </TD> <TD align="right"> 37.21 </TD> <TD align="right"> 0.77 </TD> </TR>
+  <TR> <TD> Germany </TD> <TD align="right"> 67.57 </TD> <TD align="right"> 0.21 </TD> </TR>
+  <TR> <TD> Korea, Dem. Rep. </TD> <TD align="right"> 54.91 </TD> <TD align="right"> 0.32 </TD> </TR>
+  <TR> <TD> Mauritius </TD> <TD align="right"> 55.37 </TD> <TD align="right"> 0.35 </TD> </TR>
+  <TR> <TD> Slovak Republic </TD> <TD align="right"> 67.01 </TD> <TD align="right"> 0.13 </TD> </TR>
+  <TR> <TD> Comoros </TD> <TD align="right"> 40.00 </TD> <TD align="right"> 0.45 </TD> </TR>
+  <TR> <TD> Argentina </TD> <TD align="right"> 62.69 </TD> <TD align="right"> 0.23 </TD> </TR>
+  <TR> <TD> Central African Republic </TD> <TD align="right"> 38.81 </TD> <TD align="right"> 0.18 </TD> </TR>
+  <TR> <TD> Ecuador </TD> <TD align="right"> 49.07 </TD> <TD align="right"> 0.50 </TD> </TR>
+  <TR> <TD> West Bank and Gaza </TD> <TD align="right"> 43.80 </TD> <TD align="right"> 0.60 </TD> </TR>
+  <TR> <TD> Egypt </TD> <TD align="right"> 40.97 </TD> <TD align="right"> 0.56 </TD> </TR>
+  <TR> <TD> Myanmar </TD> <TD align="right"> 41.41 </TD> <TD align="right"> 0.43 </TD> </TR>
+   </TABLE>
+
+## Two easy improvements: include the continent informaiton and sort rationally
 
 ```r
-## Two easy improvements: include the continent informaiton and sort
-## rationally
 jCoefs <- ddply(gDat, ~country + continent, jFun)
 str(jCoefs)
 ```
@@ -536,40 +534,37 @@ tail(jCoefs)
 ## 142           Zimbabwe    Africa     55.22 -0.09302
 ```
 
+## Now, prior to making the HTML table, we will sort the data.frame, so it starts with the country with the shortest life expectancy in 1952, and goes to the largest.
+
 ```r
-## Now, prior to making the HTML table, we will sort the data.frame, so it
-## starts with the country with the shortest life expectancy in 1952, and
-## goes to the largest.
 set.seed(916)
 foo <- jCoefs[sample(nrow(jCoefs), size = 15), ]
 foo <- arrange(foo, intercept)
 ## foo <- foo[order(foo$intercept), ] # an uglier non-plyr way
 foo <- xtable(foo)
-print(foo, type = "html", include.rownames = FALSE)
+print(foo, type = "html", results = "asis", include.rownames = FALSE)
 ```
 
-```
-## <!-- html table generated in R 3.0.2 by xtable 1.7-3 package -->
-## <!-- Mon Apr  7 00:05:28 2014 -->
-## <TABLE border=1>
-## <TR> <TH> country </TH> <TH> continent </TH> <TH> intercept </TH> <TH> slope </TH>  </TR>
-##   <TR> <TD> Senegal </TD> <TD> Africa </TD> <TD align="right"> 36.75 </TD> <TD align="right"> 0.50 </TD> </TR>
-##   <TR> <TD> Oman </TD> <TD> Asia </TD> <TD align="right"> 37.21 </TD> <TD align="right"> 0.77 </TD> </TR>
-##   <TR> <TD> Central African Republic </TD> <TD> Africa </TD> <TD align="right"> 38.81 </TD> <TD align="right"> 0.18 </TD> </TR>
-##   <TR> <TD> Comoros </TD> <TD> Africa </TD> <TD align="right"> 40.00 </TD> <TD align="right"> 0.45 </TD> </TR>
-##   <TR> <TD> Egypt </TD> <TD> Africa </TD> <TD align="right"> 40.97 </TD> <TD align="right"> 0.56 </TD> </TR>
-##   <TR> <TD> Myanmar </TD> <TD> Asia </TD> <TD align="right"> 41.41 </TD> <TD align="right"> 0.43 </TD> </TR>
-##   <TR> <TD> West Bank and Gaza </TD> <TD> Asia </TD> <TD align="right"> 43.80 </TD> <TD align="right"> 0.60 </TD> </TR>
-##   <TR> <TD> Dominican Republic </TD> <TD> Americas </TD> <TD align="right"> 48.60 </TD> <TD align="right"> 0.47 </TD> </TR>
-##   <TR> <TD> Ecuador </TD> <TD> Americas </TD> <TD align="right"> 49.07 </TD> <TD align="right"> 0.50 </TD> </TR>
-##   <TR> <TD> Korea, Dem. Rep. </TD> <TD> Asia </TD> <TD align="right"> 54.91 </TD> <TD align="right"> 0.32 </TD> </TR>
-##   <TR> <TD> Mauritius </TD> <TD> Africa </TD> <TD align="right"> 55.37 </TD> <TD align="right"> 0.35 </TD> </TR>
-##   <TR> <TD> Lebanon </TD> <TD> Asia </TD> <TD align="right"> 58.69 </TD> <TD align="right"> 0.26 </TD> </TR>
-##   <TR> <TD> Argentina </TD> <TD> Americas </TD> <TD align="right"> 62.69 </TD> <TD align="right"> 0.23 </TD> </TR>
-##   <TR> <TD> Slovak Republic </TD> <TD> Europe </TD> <TD align="right"> 67.01 </TD> <TD align="right"> 0.13 </TD> </TR>
-##   <TR> <TD> Germany </TD> <TD> Europe </TD> <TD align="right"> 67.57 </TD> <TD align="right"> 0.21 </TD> </TR>
-##    </TABLE>
-```
+<!-- html table generated in R 3.0.2 by xtable 1.7-3 package -->
+<!-- Mon Apr  7 00:30:45 2014 -->
+<TABLE border=1>
+<TR> <TH> country </TH> <TH> continent </TH> <TH> intercept </TH> <TH> slope </TH>  </TR>
+  <TR> <TD> Senegal </TD> <TD> Africa </TD> <TD align="right"> 36.75 </TD> <TD align="right"> 0.50 </TD> </TR>
+  <TR> <TD> Oman </TD> <TD> Asia </TD> <TD align="right"> 37.21 </TD> <TD align="right"> 0.77 </TD> </TR>
+  <TR> <TD> Central African Republic </TD> <TD> Africa </TD> <TD align="right"> 38.81 </TD> <TD align="right"> 0.18 </TD> </TR>
+  <TR> <TD> Comoros </TD> <TD> Africa </TD> <TD align="right"> 40.00 </TD> <TD align="right"> 0.45 </TD> </TR>
+  <TR> <TD> Egypt </TD> <TD> Africa </TD> <TD align="right"> 40.97 </TD> <TD align="right"> 0.56 </TD> </TR>
+  <TR> <TD> Myanmar </TD> <TD> Asia </TD> <TD align="right"> 41.41 </TD> <TD align="right"> 0.43 </TD> </TR>
+  <TR> <TD> West Bank and Gaza </TD> <TD> Asia </TD> <TD align="right"> 43.80 </TD> <TD align="right"> 0.60 </TD> </TR>
+  <TR> <TD> Dominican Republic </TD> <TD> Americas </TD> <TD align="right"> 48.60 </TD> <TD align="right"> 0.47 </TD> </TR>
+  <TR> <TD> Ecuador </TD> <TD> Americas </TD> <TD align="right"> 49.07 </TD> <TD align="right"> 0.50 </TD> </TR>
+  <TR> <TD> Korea, Dem. Rep. </TD> <TD> Asia </TD> <TD align="right"> 54.91 </TD> <TD align="right"> 0.32 </TD> </TR>
+  <TR> <TD> Mauritius </TD> <TD> Africa </TD> <TD align="right"> 55.37 </TD> <TD align="right"> 0.35 </TD> </TR>
+  <TR> <TD> Lebanon </TD> <TD> Asia </TD> <TD align="right"> 58.69 </TD> <TD align="right"> 0.26 </TD> </TR>
+  <TR> <TD> Argentina </TD> <TD> Americas </TD> <TD align="right"> 62.69 </TD> <TD align="right"> 0.23 </TD> </TR>
+  <TR> <TD> Slovak Republic </TD> <TD> Europe </TD> <TD align="right"> 67.01 </TD> <TD align="right"> 0.13 </TD> </TR>
+  <TR> <TD> Germany </TD> <TD> Europe </TD> <TD align="right"> 67.57 </TD> <TD align="right"> 0.21 </TD> </TR>
+   </TABLE>
 
 
 # jFun only requires one argument, x. What if it had more than one argument?

@@ -148,22 +148,26 @@ library(xtable)
 ```
 
 ## Pick some countries at random and display their estimated coefficients
-```{r}
+```{r results='asis'}
 set.seed(916)
 foo <- jCoefs[sample(nrow(jCoefs), size = 15), ]
 foo <- xtable(foo)
 print(foo, type = "html", include.rownames = FALSE)
+```
 ## Two easy improvements: include the continent informaiton and sort rationally
+```{r}
 jCoefs <- ddply(gDat, ~country + continent, jFun)
 str(jCoefs)
 tail(jCoefs)
+```
 ## Now, prior to making the HTML table, we will sort the data.frame, so it starts with the country with the shortest life expectancy in 1952, and goes to the largest.
+```{r results='asis'}
 set.seed(916)
 foo <- jCoefs[sample(nrow(jCoefs), size = 15), ]
 foo <- arrange(foo, intercept)
 ## foo <- foo[order(foo$intercept), ] # an uglier non-plyr way
 foo <- xtable(foo)
-print(foo, type = "html", include.rownames = FALSE)
+print(foo, type = "html", results='asis', include.rownames = FALSE)
 ```
 
 # jFun only requires one argument, x. What if it had more than one argument?
