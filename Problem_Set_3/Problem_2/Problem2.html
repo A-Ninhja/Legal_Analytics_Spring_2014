@@ -181,7 +181,7 @@ hljs.initHighlightingOnLoad();
 <body>
 <h2>Legal Analytics Problem Set 3 - Part 2</h2>
 
-<h2>Andy Ninh</h2>
+<h2>Andy Ninh - 2014</h2>
 
 <hr/>
 
@@ -411,9 +411,9 @@ summary(jFit)
 ## F-statistic: 4.2e+03 on 1 and 10 DF,  p-value: 1.86e-14
 </code></pre>
 
-<pre><code class="r">## The intercept is around 68. This makes much more sense. So, what is jFit
-## and what can we get out of it?
-class(jFit)
+<p>The intercept is around 68. This makes much more sense. So, what is jFit and what can we get out of it?</p>
+
+<pre><code class="r">class(jFit)
 </code></pre>
 
 <pre><code>## [1] &quot;lm&quot;
@@ -425,9 +425,7 @@ class(jFit)
 <pre><code>## [1] &quot;list&quot;
 </code></pre>
 
-<pre><code class="r">## So, jFit is of class &#39;lm&#39; and its mode is list. So that means I could use
-## indexing to isolate specific components. But what&#39;s in there?
-</code></pre>
+<p>So, jFit is of class &ldquo;lm&rdquo; and its mode is list. So that means I could use indexing to isolate specific components. But what&#39;s in there?</p>
 
 <pre><code class="r">## str(jFit) # too ugly to print here but you should look
 names(jFit)
@@ -445,20 +443,18 @@ names(jFit)
 ##           67.7901            0.2385
 </code></pre>
 
-<pre><code class="r">## Using str() and names() reveals a great deal about this &#39;lm&#39; object and
-## reading the help file for lm() would explain a great deal more. In the See
-## Also section we learn there&#39;s a generic function coef() which looks
-## promising.
-coef(jFit)
+<p>Using str() and names() reveals a great deal about this &ldquo;lm&rdquo; object and reading the help file for lm() would explain a great deal more. In the See Also section we learn there&#39;s a generic function coef() which looks promising.</p>
+
+<pre><code class="r">coef(jFit)
 </code></pre>
 
 <pre><code>##       (Intercept) I(year - yearMin) 
 ##           67.7901            0.2385
 </code></pre>
 
-<pre><code class="r">## We have achieved our goal for this specific country -- we&#39;ve gotten its
-## intercept and slope. Now we need to package that as a function.
-jFun &lt;- function(x) coef(lm(lifeExp ~ I(year - yearMin), x))
+<p>We have achieved our goal for this specific country &ndash; we&#39;ve gotten its intercept and slope. Now we need to package that as a function.</p>
+
+<pre><code class="r">jFun &lt;- function(x) coef(lm(lifeExp ~ I(year - yearMin), x))
 jFun(jDat)  # trying out our new function ... yes still get same numbers
 </code></pre>
 
@@ -578,7 +574,7 @@ print(foo, type = &quot;html&quot;, include.rownames = FALSE)
 
 <!-- html table generated in R 3.0.2 by xtable 1.7-3 package -->
 
-<!-- Mon Apr  7 00:30:45 2014 -->
+<!-- Mon Apr  7 00:42:34 2014 -->
 
 <TABLE border=1>
 <TR> <TH> country </TH> <TH> intercept </TH> <TH> slope </TH>  </TR>
@@ -599,7 +595,7 @@ print(foo, type = &quot;html&quot;, include.rownames = FALSE)
   <TR> <TD> Myanmar </TD> <TD align="right"> 41.41 </TD> <TD align="right"> 0.43 </TD> </TR>
    </TABLE>
 
-<h2>Two easy improvements: include the continent informaiton and sort rationally</h2>
+<h2>Two easy improvements: include the continent information and sort rationally</h2>
 
 <pre><code class="r">jCoefs &lt;- ddply(gDat, ~country + continent, jFun)
 str(jCoefs)
@@ -624,19 +620,19 @@ str(jCoefs)
 ## 142           Zimbabwe    Africa     55.22 -0.09302
 </code></pre>
 
-<h2>Now, prior to making the HTML table, we will sort the data.frame, so it starts with the country with the shortest life expectancy in 1952, and goes to the largest.</h2>
+<p>Now, prior to making the HTML table, we will sort the data.frame, so it starts with the country with the shortest life expectancy in 1952, and goes to the largest.</p>
 
 <pre><code class="r">set.seed(916)
 foo &lt;- jCoefs[sample(nrow(jCoefs), size = 15), ]
 foo &lt;- arrange(foo, intercept)
 ## foo &lt;- foo[order(foo$intercept), ] # an uglier non-plyr way
 foo &lt;- xtable(foo)
-print(foo, type = &quot;html&quot;, results = &quot;asis&quot;, include.rownames = FALSE)
+print(foo, type = &quot;html&quot;, include.rownames = FALSE)
 </code></pre>
 
 <!-- html table generated in R 3.0.2 by xtable 1.7-3 package -->
 
-<!-- Mon Apr  7 00:30:45 2014 -->
+<!-- Mon Apr  7 00:42:35 2014 -->
 
 <TABLE border=1>
 <TR> <TH> country </TH> <TH> continent </TH> <TH> intercept </TH> <TH> slope </TH>  </TR>
@@ -677,9 +673,9 @@ head(jCoefsSilly)
 ## 6   Australia    -376.1 0.2277
 </code></pre>
 
-<pre><code class="r">## We are getting the same estimated slopes but the silly year 0 intercepts
-## we&#39;ve seen before. Let&#39;s use the cvShift = argument to resolve this.
-jCoefsSane &lt;- ddply(gDat, ~country, jFunTwoArgs, cvShift = 1952)
+<p>We are getting the same estimated slopes but the silly year 0 intercepts we&#39;ve seen before. Let&#39;s use the cvShift = argument to resolve this.</p>
+
+<pre><code class="r">jCoefsSane &lt;- ddply(gDat, ~country, jFunTwoArgs, cvShift = 1952)
 head(jCoefsSane)
 </code></pre>
 
@@ -692,10 +688,9 @@ head(jCoefsSane)
 ## 6   Australia     68.40 0.2277
 </code></pre>
 
-<pre><code class="r">## We&#39;re back to our usual estimated intercepts, which reflect life
-## expectancy in 1952. Of course hard-wiring 1952 is not a great idea, so
-## here&#39;s probably our best code yet:
-jCoefsBest &lt;- ddply(gDat, ~country, jFunTwoArgs, cvShift = min(gDat$year))
+<p>We&#39;re back to our usual estimated intercepts, which reflect life expectancy in 1952. Of course hard-wiring 1952 is not a great idea, so here&#39;s probably our best code yet:</p>
+
+<pre><code class="r">jCoefsBest &lt;- ddply(gDat, ~country, jFunTwoArgs, cvShift = min(gDat$year))
 head(jCoefsBest)
 </code></pre>
 

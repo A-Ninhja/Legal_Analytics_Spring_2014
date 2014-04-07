@@ -1,6 +1,6 @@
 Legal Analytics Problem Set 3 - Part 2
 -----------------------------------------------------------------------------
-## Andy Ninh
+## Andy Ninh - 2014
 -----------------------------------------------------------------------------
 
 ## Loading the Gapminder data
@@ -83,19 +83,25 @@ summary(jFit)
 (yearMin <- min(gDat$year))
 jFit <- lm(lifeExp ~ I(year - yearMin), jDat)
 summary(jFit)
-## The intercept is around 68. This makes much more sense. So, what is jFit and what can we get out of it?
+```
+The intercept is around 68. This makes much more sense. So, what is jFit and what can we get out of it?
+```{r}
 class(jFit)
 mode(jFit)
-## So, jFit is of class "lm" and its mode is list. So that means I could use indexing to isolate specific components. But what's in there?
 ```
+So, jFit is of class "lm" and its mode is list. So that means I could use indexing to isolate specific components. But what's in there?
 
 ```{r}
 ## str(jFit) # too ugly to print here but you should look
 names(jFit)
 jFit$coefficients
-## Using str() and names() reveals a great deal about this "lm" object and reading the help file for lm() would explain a great deal more. In the See Also section we learn there's a generic function coef() which looks promising.
+```
+Using str() and names() reveals a great deal about this "lm" object and reading the help file for lm() would explain a great deal more. In the See Also section we learn there's a generic function coef() which looks promising.
+```{r}
 coef(jFit)
-## We have achieved our goal for this specific country -- we've gotten its intercept and slope. Now we need to package that as a function.
+```
+We have achieved our goal for this specific country -- we've gotten its intercept and slope. Now we need to package that as a function.
+```{r}
 jFun <- function(x) coef(lm(lifeExp ~ I(year - yearMin), x))
 jFun(jDat)  # trying out our new function ... yes still get same numbers
 ```
@@ -154,20 +160,20 @@ foo <- jCoefs[sample(nrow(jCoefs), size = 15), ]
 foo <- xtable(foo)
 print(foo, type = "html", include.rownames = FALSE)
 ```
-## Two easy improvements: include the continent informaiton and sort rationally
+## Two easy improvements: include the continent information and sort rationally
 ```{r}
 jCoefs <- ddply(gDat, ~country + continent, jFun)
 str(jCoefs)
 tail(jCoefs)
 ```
-## Now, prior to making the HTML table, we will sort the data.frame, so it starts with the country with the shortest life expectancy in 1952, and goes to the largest.
+Now, prior to making the HTML table, we will sort the data.frame, so it starts with the country with the shortest life expectancy in 1952, and goes to the largest.
 ```{r results='asis'}
 set.seed(916)
 foo <- jCoefs[sample(nrow(jCoefs), size = 15), ]
 foo <- arrange(foo, intercept)
 ## foo <- foo[order(foo$intercept), ] # an uglier non-plyr way
 foo <- xtable(foo)
-print(foo, type = "html", results='asis', include.rownames = FALSE)
+print(foo, type = "html", include.rownames = FALSE)
 ```
 
 # jFun only requires one argument, x. What if it had more than one argument?
@@ -179,10 +185,14 @@ jFunTwoArgs <- function(x, cvShift = 0) {
 }
 jCoefsSilly <- ddply(gDat, ~country, jFunTwoArgs)
 head(jCoefsSilly)
-## We are getting the same estimated slopes but the silly year 0 intercepts we've seen before. Let's use the cvShift = argument to resolve this.
+```
+We are getting the same estimated slopes but the silly year 0 intercepts we've seen before. Let's use the cvShift = argument to resolve this.
+```{r}
 jCoefsSane <- ddply(gDat, ~country, jFunTwoArgs, cvShift = 1952)
 head(jCoefsSane)
-## We're back to our usual estimated intercepts, which reflect life expectancy in 1952. Of course hard-wiring 1952 is not a great idea, so here's probably our best code yet:
+```
+We're back to our usual estimated intercepts, which reflect life expectancy in 1952. Of course hard-wiring 1952 is not a great idea, so here's probably our best code yet:
+```{r}
 jCoefsBest <- ddply(gDat, ~country, jFunTwoArgs, cvShift = min(gDat$year))
 head(jCoefsBest)
 ```

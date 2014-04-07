@@ -1,6 +1,6 @@
 Legal Analytics Problem Set 3 - Part 2
 -----------------------------------------------------------------------------
-## Andy Ninh
+## Andy Ninh - 2014
 -----------------------------------------------------------------------------
 
 ## Loading the Gapminder data
@@ -278,9 +278,9 @@ summary(jFit)
 ## F-statistic: 4.2e+03 on 1 and 10 DF,  p-value: 1.86e-14
 ```
 
+The intercept is around 68. This makes much more sense. So, what is jFit and what can we get out of it?
+
 ```r
-## The intercept is around 68. This makes much more sense. So, what is jFit
-## and what can we get out of it?
 class(jFit)
 ```
 
@@ -296,11 +296,7 @@ mode(jFit)
 ## [1] "list"
 ```
 
-```r
-## So, jFit is of class 'lm' and its mode is list. So that means I could use
-## indexing to isolate specific components. But what's in there?
-```
-
+So, jFit is of class "lm" and its mode is list. So that means I could use indexing to isolate specific components. But what's in there?
 
 
 ```r
@@ -323,11 +319,9 @@ jFit$coefficients
 ##           67.7901            0.2385
 ```
 
+Using str() and names() reveals a great deal about this "lm" object and reading the help file for lm() would explain a great deal more. In the See Also section we learn there's a generic function coef() which looks promising.
+
 ```r
-## Using str() and names() reveals a great deal about this 'lm' object and
-## reading the help file for lm() would explain a great deal more. In the See
-## Also section we learn there's a generic function coef() which looks
-## promising.
 coef(jFit)
 ```
 
@@ -336,9 +330,9 @@ coef(jFit)
 ##           67.7901            0.2385
 ```
 
+We have achieved our goal for this specific country -- we've gotten its intercept and slope. Now we need to package that as a function.
+
 ```r
-## We have achieved our goal for this specific country -- we've gotten its
-## intercept and slope. Now we need to package that as a function.
 jFun <- function(x) coef(lm(lifeExp ~ I(year - yearMin), x))
 jFun(jDat)  # trying out our new function ... yes still get same numbers
 ```
@@ -485,7 +479,7 @@ print(foo, type = "html", include.rownames = FALSE)
 ```
 
 <!-- html table generated in R 3.0.2 by xtable 1.7-3 package -->
-<!-- Mon Apr  7 00:30:45 2014 -->
+<!-- Mon Apr  7 00:42:34 2014 -->
 <TABLE border=1>
 <TR> <TH> country </TH> <TH> intercept </TH> <TH> slope </TH>  </TR>
   <TR> <TD> Lebanon </TD> <TD align="right"> 58.69 </TD> <TD align="right"> 0.26 </TD> </TR>
@@ -505,7 +499,7 @@ print(foo, type = "html", include.rownames = FALSE)
   <TR> <TD> Myanmar </TD> <TD align="right"> 41.41 </TD> <TD align="right"> 0.43 </TD> </TR>
    </TABLE>
 
-## Two easy improvements: include the continent informaiton and sort rationally
+## Two easy improvements: include the continent information and sort rationally
 
 ```r
 jCoefs <- ddply(gDat, ~country + continent, jFun)
@@ -534,7 +528,7 @@ tail(jCoefs)
 ## 142           Zimbabwe    Africa     55.22 -0.09302
 ```
 
-## Now, prior to making the HTML table, we will sort the data.frame, so it starts with the country with the shortest life expectancy in 1952, and goes to the largest.
+Now, prior to making the HTML table, we will sort the data.frame, so it starts with the country with the shortest life expectancy in 1952, and goes to the largest.
 
 ```r
 set.seed(916)
@@ -542,11 +536,11 @@ foo <- jCoefs[sample(nrow(jCoefs), size = 15), ]
 foo <- arrange(foo, intercept)
 ## foo <- foo[order(foo$intercept), ] # an uglier non-plyr way
 foo <- xtable(foo)
-print(foo, type = "html", results = "asis", include.rownames = FALSE)
+print(foo, type = "html", include.rownames = FALSE)
 ```
 
 <!-- html table generated in R 3.0.2 by xtable 1.7-3 package -->
-<!-- Mon Apr  7 00:30:45 2014 -->
+<!-- Mon Apr  7 00:42:35 2014 -->
 <TABLE border=1>
 <TR> <TH> country </TH> <TH> continent </TH> <TH> intercept </TH> <TH> slope </TH>  </TR>
   <TR> <TD> Senegal </TD> <TD> Africa </TD> <TD align="right"> 36.75 </TD> <TD align="right"> 0.50 </TD> </TR>
@@ -589,9 +583,9 @@ head(jCoefsSilly)
 ## 6   Australia    -376.1 0.2277
 ```
 
+We are getting the same estimated slopes but the silly year 0 intercepts we've seen before. Let's use the cvShift = argument to resolve this.
+
 ```r
-## We are getting the same estimated slopes but the silly year 0 intercepts
-## we've seen before. Let's use the cvShift = argument to resolve this.
 jCoefsSane <- ddply(gDat, ~country, jFunTwoArgs, cvShift = 1952)
 head(jCoefsSane)
 ```
@@ -606,10 +600,9 @@ head(jCoefsSane)
 ## 6   Australia     68.40 0.2277
 ```
 
+We're back to our usual estimated intercepts, which reflect life expectancy in 1952. Of course hard-wiring 1952 is not a great idea, so here's probably our best code yet:
+
 ```r
-## We're back to our usual estimated intercepts, which reflect life
-## expectancy in 1952. Of course hard-wiring 1952 is not a great idea, so
-## here's probably our best code yet:
 jCoefsBest <- ddply(gDat, ~country, jFunTwoArgs, cvShift = min(gDat$year))
 head(jCoefsBest)
 ```
