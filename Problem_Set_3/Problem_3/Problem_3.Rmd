@@ -1,0 +1,49 @@
+Legal Analytics Problem Set 3 Part 3
+========================================================
+## Andy Ninh, 2014
+========================================================
+
+# Hierarchial Clustering
+
+For the hierarchial clustering methods, the dendogram is the main graphical tool for getting insight into a cluster solution. To illustrate interpretation of the dendogram, we'll look at a cluster analysis performed on a set of cars from 1978-1979.
+```{r}
+library(foreign)
+cars = read.delim("http://www.stat.berkeley.edu/classes/s133/data/cars.tab", stringsAsFactors=FALSE)
+head(cars)
+```
+
+It looks like the variables are measured on different scales, so we will likely want to standardize the data before proceeding. 
+
+```{r}
+cars.use = cars[,-c(1,2)]
+medians = apply(cars.use,2,median)
+mads = apply(cars.use,2,mad)
+cars.use = scale(cars.use,center=medians,scale=mads)
+cars.use
+```
+
+(The 2 used as the second argument to apply means to apply the function to the columns of the matrix or data frame; a value of 1 means to use the rows.) The country of origin and name of the car will not be useful in the cluster analysis, so they have been removed. Notice that the scale function doesn't change the order of the rows of the data frame, so it will be easy to identify observations using the omitted columns from the original data.
+
+First, we'll take a look at a hierarchical method, since it will provide information about solutions with different numbers of clusters. The first step is calculating a distance matrix. For a data set with n observations, the distance matrix will have n rows and n columns; the (i,j)th element of the distance matrix will be the difference between observation i and observation j. There are two functions that can be used to calculate distance matrices in R; the dist function, which is included in every version of R, and the daisy function, which is part of the cluster library. We'll use the dist function in this example, but you should familiarize yourself with the daisy function (by reading its help page), since it offers some capabilities that dist does not. Each function provides a choice of distance metrics; in this example, we'll use the default of Euclidean distance, but you may find that using other metrics will give different insights into the structure of your data.
+
+```{r}
+cars.dist = dist(cars.use)
+cars.dist
+```
+
+When we display the distance matrix in R (for example, by typing its name), you'll notice that only the lower triangle of the matrix is displayed. This is to remind us that the distance matrix is symmetric, since it doesn't matter which observation we consider first when we calculate a distance. R takes advantage of this fact by only storing the lower triangle of the distance matrix. All of the clustering functions will recognize this and have no problems, but if you try to access the distance matrix in the usual way (for example, with subscripting), you'll see an error message. Thus, if you need to use the distance matrix with anything other than the clustering functions, you'll need to use as.matrix to convert it to a regular matrix.
+
+To get started, we'll use the hclust method; the cluster library provides a similar function, called agnes to perform hierarchical cluster analysis.
+
+```{r}
+cars.hclust = hclust(cars.dist)
+cars.hclust
+```
+
+Once again, we're using the default method of hclust, which is to update the distance matrix using what R calls "complete" linkage. Using this method, when a cluster is formed, its distance to other objects is computed as the maximum distance between any object in the cluster and the other object. Other linkage methods will provide different solutions, and should not be ignored. For example, using method=ward tends to produce clusters of fairly equal size, and can be useful when other methods find clusters that contain just a few observations.
+
+Now that we've got a cluster solution (actually a collection of cluster solutions), how can we examine the results? The main graphical tool for looking at a hierarchical cluster solution is known as a dendogram. This is a tree-like display that lists the objects which are clustered along the x-axis, and the distance at which the cluster was formed along the y-axis. (Distances along the x-axis are meaningless in a dendogram; the observations are equally spaced to make the dendogram easier to read.) To create a dendogram from a cluster solution, simply pass it to the plot function. The result is displayed below.
+
+```{r}
+plot(cars.hclust,labels=cars$Car,main='Default from hclust')
+```

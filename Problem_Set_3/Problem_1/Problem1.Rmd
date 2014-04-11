@@ -9,9 +9,21 @@ The dataset I used contains records of the survival of Titanic Passengers and su
 
 I took one part of the dataset to train my models, and another part to test them.  The factors that I focused on were passenger class, sex, age, and number of siblings/spouses aboard.
 
-First, let’s look at the GLM:
+## Creating the training data
 ```{r}
-titanic.train <- read.csv("titanic3.csv", header=TRUE)
+library(foreign)
+titanic3 <- read.csv("http://biostat.mc.vanderbilt.edu/wiki/pub/Main/DataSets/titanic3.csv")
+dim(titanic3)
+attributes(titanic3)
+titanic3[1:5,]
+set.seed(1234)
+ind <- sample(2, nrow(titanic3), replace=TRUE, prob=c(0.50, 0.50))
+titanic.train <- titanic3[ind==1,]
+titanic.test <- titanic3[ind==2,]
+```
+
+## GLM
+```{r}
 titanic.survival.train = glm(survived ~ pclass + sex + pclass:sex + age + sibsp,
 family = binomial(logit), data = titanic.train)
 ```
@@ -19,4 +31,31 @@ family = binomial(logit), data = titanic.train)
 As you can see, I worked in an interaction effect between passenger class and sex, as passenger class showed a much bigger difference in survival rate amongst the women compared to the men (i.e. Higher class women were much more likely to survive than lower class women, whereas first class Men were more likely to survive than 2nd or 3rd class men, but not by the same margin as amongst the women).  Following is the model summary output, if you’re interested:
 ```{r}
 summary(titanic.survival.train)
+```
+
+```{r}
+titanic.test$probs.glm = predict(titantic.survival.train, titanic.test, type=”response”)
+sum(titanic.test$probs.glm > .5)
+titanic.test$survived == 1)
+```
+
+So, after I used my model to predict survival probabilities on the testing portion of the dataset, I checked to see how many records showed a probability of over .5 (or 50%), and then how many of those records were actual survivors.  For the GLM, 146/164 (89%) of those records scored at 50% or higher were actual survivors.  Not bad!
+
+## Random Forests
+```{r}
+library(randomForest)
+titanic.survival.train.rf = randomForest(as.factor(survived) ~ pclass + sex + age + sibsp, data=titanic.train,ntree=5000, importance=TRUE, na.action = na.omit)
+titanic.survival.train.rf
+importance(titanic.survival.train.rf)
+```
+It seems to me that the output indicates that the Random Forests model is better at creating true negatives than true positives, with regards to survival of the passengers, but when I asked for the predicted survival categories in the testing portion of my dataset, it appeared to do a pretty decent job predicting who would survive and who wouldn’t:
+
+For the Random Forests model, 155/184 (84%) of those records predicted to survive actually did survive!  Again, not bad.
+
+## The Conditional Tree Model
+```{r}
+library(party)
+titanic.survival.train.ctree = ctree(as.factor(survived) ~ pclass + sex + age + sibsp, data=titanic.train)
+titanic.survival.train.ctree
+plot(titanic.survival.train.ctree)
 ```
