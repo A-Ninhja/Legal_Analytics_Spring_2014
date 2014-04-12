@@ -332,3 +332,231 @@ plot(cars.hclust, labels = cars$Car, main = "Default from hclust")
 
 ![plot of chunk unnamed-chunk-5](figure/unnamed-chunk-5.png) 
 
+
+If you choose any height along the y-axis of the dendogram, and move across the dendogram counting the number of lines that you cross, each line represents a group that was identified when objects were joined together into clusters. The observations in that group are represented by the branches of the dendogram that spread out below the line. For example, if we look at a height of 6, and move across the x-axis at that height, we'll cross two lines. That defines a two-cluster solution; by following the line down through all its branches, we can see the names of the cars that are included in these two clusters. Since the y-axis represents how close together observations were when they were merged into clusters, clusters whose branches are very close together (in terms of the heights at which they were merged) probably aren't very reliable. But if there's a big difference along the y-axis between the last merged cluster and the currently merged one, that indicates that the clusters formed are probably doing a good job in showing us the structure of the data. Looking at the dendogram for the car data, there are clearly two very distinct groups; the right hand group seems to consist of two more distinct cluster, while most of the observations in the left hand group are clustering together at about the same height For this data set, it looks like either two or three groups might be an interesting place to start investigating. This is not to imply that looking at solutions with more clusters would be meaningless, but the data seems to suggest that two or three clusters might be a good start. For a problem of this size, we can see the names of the cars, so we could start interpreting the results immediately from the dendogram, but when there are larger numbers of observations, this won't be possible.
+
+One of the first things we can look at is how many cars are in each of the groups. We'd like to do this for both the two cluster and three cluster solutions. You can create a vector showing the cluster membership of each observation by using the cutree function. Since the object returned by a hierarchical cluster analysis contains information about solutions with different numbers of clusters, we pass the cutree function the cluster object and the number of clusters we're interested in. So to get cluster memberships for the three cluster solution, we could use:
+
+
+```r
+groups.3 = cutree(cars.hclust, 3)
+```
+
+
+Simply displaying the group memberships isn't that revealing. A good first step is to use the table function to see how many observations are in each cluster. We'd like a solution where there aren't too many clusters with just a few observations, because it may make it difficult to interpret our results. For the three cluster solution, the distribution among the clusters looks good:
+
+
+```r
+table(groups.3)
+```
+
+```
+## groups.3
+##  1  2  3 
+##  8 20 10
+```
+
+
+Notice that you can get this information for many different groupings at once by combining the calls to *cutree* and *table* in a call to *sapply*. For example, to see the sizes of the clusters for solutions ranging from 2 to 6 clusters, we could use:
+
+
+```r
+counts = sapply(2:6, function(ncl) table(cutree(cars.hclust, ncl)))
+names(counts) = 2:6
+counts
+```
+
+```
+## $`2`
+## 
+##  1  2 
+## 18 20 
+## 
+## $`3`
+## 
+##  1  2  3 
+##  8 20 10 
+## 
+## $`4`
+## 
+##  1  2  3  4 
+##  8 17  3 10 
+## 
+## $`5`
+## 
+##  1  2  3  4  5 
+##  8 11  6  3 10 
+## 
+## $`6`
+## 
+##  1  2  3  4  5  6 
+##  8 11  6  3  5  5
+```
+
+
+To see which cars are in which clusters, we can use subscripting on the vector of car names to choose just the observations from a particular cluster. Since we used all of the observations in the data set to form the distance matrix, the ordering of the names in the original data will coincide with the values returned by cutree. If observations were removed from the data before the distance matrix is computed, it's important to remember to make the same deletions in the vector from the original data set that will be used to identify observations. So, to see which cars were in the first cluster for the four cluster solution, we can use:
+
+
+```r
+cars$Car[groups.3 == 1]
+```
+
+```
+## [1] "Buick Estate Wagon"        "Ford Country Squire Wagon"
+## [3] "Chevy Malibu Wagon"        "Chrysler LeBaron Wagon"   
+## [5] "Chevy Caprice Classic"     "Ford LTD"                 
+## [7] "Mercury Grand Marquis"     "Dodge St Regis"
+```
+
+
+As usual, if we want to do the same thing for all the groups at once, we can use *sapply*:
+
+
+```r
+sapply(unique(groups.3), function(g) cars$Car[groups.3 == g])
+```
+
+```
+## [[1]]
+## [1] "Buick Estate Wagon"        "Ford Country Squire Wagon"
+## [3] "Chevy Malibu Wagon"        "Chrysler LeBaron Wagon"   
+## [5] "Chevy Caprice Classic"     "Ford LTD"                 
+## [7] "Mercury Grand Marquis"     "Dodge St Regis"           
+## 
+## [[2]]
+##  [1] "Chevette"         "Toyota Corona"    "Datsun 510"      
+##  [4] "Dodge Omni"       "Audi 5000"        "Saab 99 GLE"     
+##  [7] "Ford Mustang 4"   "Mazda GLC"        "Dodge Colt"      
+## [10] "AMC Spirit"       "VW Scirocco"      "Honda Accord LX" 
+## [13] "Buick Skylark"    "Pontiac Phoenix"  "Plymouth Horizon"
+## [16] "Datsun 210"       "Fiat Strada"      "VW Dasher"       
+## [19] "BMW 320i"         "VW Rabbit"       
+## 
+## [[3]]
+##  [1] "Volvo 240 GL"          "Peugeot 694 SL"       
+##  [3] "Buick Century Special" "Mercury Zephyr"       
+##  [5] "Dodge Aspen"           "AMC Concord D/L"      
+##  [7] "Ford Mustang Ghia"     "Chevy Citation"       
+##  [9] "Olds Omega"            "Datsun 810"
+```
+
+
+We could also see what happens when we use the four cluster solution.
+
+
+```r
+groups.4 = cutree(cars.hclust, 4)
+sapply(unique(groups.4), function(g) cars$Car[groups.4 == g])
+```
+
+```
+## [[1]]
+## [1] "Buick Estate Wagon"        "Ford Country Squire Wagon"
+## [3] "Chevy Malibu Wagon"        "Chrysler LeBaron Wagon"   
+## [5] "Chevy Caprice Classic"     "Ford LTD"                 
+## [7] "Mercury Grand Marquis"     "Dodge St Regis"           
+## 
+## [[2]]
+##  [1] "Chevette"         "Toyota Corona"    "Datsun 510"      
+##  [4] "Dodge Omni"       "Ford Mustang 4"   "Mazda GLC"       
+##  [7] "Dodge Colt"       "AMC Spirit"       "VW Scirocco"     
+## [10] "Honda Accord LX"  "Buick Skylark"    "Pontiac Phoenix" 
+## [13] "Plymouth Horizon" "Datsun 210"       "Fiat Strada"     
+## [16] "VW Dasher"        "VW Rabbit"       
+## 
+## [[3]]
+## [1] "Audi 5000"   "Saab 99 GLE" "BMW 320i"   
+## 
+## [[4]]
+##  [1] "Volvo 240 GL"          "Peugeot 694 SL"       
+##  [3] "Buick Century Special" "Mercury Zephyr"       
+##  [5] "Dodge Aspen"           "AMC Concord D/L"      
+##  [7] "Ford Mustang Ghia"     "Chevy Citation"       
+##  [9] "Olds Omega"            "Datsun 810"
+```
+
+
+The new cluster can be recognized as the third group in the above output.
+
+Often there is an auxiliary variable in the original data set that was not included in the cluster analysis, but may be of interest. In fact, cluster analysis is sometimes performed to see if observations naturally group themselves in accord with some already measured variable. For this data set, we could ask whether the clusters reflect the country of origin of the cars, stored in the variable *Country* in the original data set. The *table* function can be used, this time passing two arguments, to produce a cross-tabulation of cluster group membership and country of origin:
+
+
+```r
+table(groups.3, cars$Country)
+```
+
+```
+##         
+## groups.3 France Germany Italy Japan Sweden U.S.
+##        1      0       0     0     0      0    8
+##        2      0       5     1     6      1    7
+##        3      1       0     0     1      1    7
+```
+
+
+Of interest is the fact that all of the cars in cluster 1 were manufactured in the US. Considering the state of the automobile industry in 1978, and the cars that were identified in cluster 1, this is not surprising.
+
+In an example like this, with a small number of observations, we can often interpret the cluster solution directly by looking at the labels of the observations that are in each cluster. Of course, for larger data sets, this will be impossible or meaningless. A very useful method for characterizing clusters is to look at some sort of summary statistic, like the median, of the variables that were used to perform the cluster analysis, broken down by the groups that the cluster analysis identified. The *aggregate* function is well suited for this task, since it will perform summaries on many variables simultaneously. Let's look at the median values for the variables we've used in the cluster analysis, broken up by the cluster groups. One oddity of the *aggregate* function is that it demands that the variable(s) used to divide up the data are passed to it in a list, even if there's only one variable:
+
+
+```r
+aggregate(cars.use, list(groups.3), median)
+```
+
+```
+##   Group.1     MPG  Weight Drive_Ratio Horsepower Displacement Cylinders
+## 1       1 -0.7945  1.5051     -0.9134     1.0476       2.4776    4.7214
+## 2       2  0.6859 -0.5871      0.5269    -0.6027      -0.5810   -0.6745
+## 3       3 -0.4058  0.5246     -0.1686     0.3588       0.3272    2.0235
+```
+
+
+If the ranges of these numbers seem strange, it's because we standardized the data before performing the cluster analysis. While it is usually more meaningful to look at the variables in their original scales, when data is centered, negative values mean "lower than most" and positive values mean "higher than most". Thus, group 1 is cars with relatively low MPG, high weight, low drive ratios, high horsepower and displacement, and more than average number of cylinders. Group 2 are cars with high gas mileage, and low weight and horsepower; and group 3 is similar to group 1. It may be easier to understand the groupings if we look at the variables in their original scales:
+
+
+```r
+aggregate(cars[, -c(1, 2)], list(groups.3), median)
+```
+
+```
+##   Group.1   MPG Weight Drive_Ratio Horsepower Displacement Cylinders
+## 1       1 17.30  3.890       2.430      136.5          334         8
+## 2       2 30.25  2.215       3.455       79.0          105         4
+## 3       3 20.70  3.105       2.960      112.5          173         6
+```
+
+
+It may also be useful to add the numbers of observations in each group to the above display. Since *aggregate* returns a data frame, we can manipulate it in any way we want:
+
+
+```r
+a3 = aggregate(cars[, -c(1, 2)], list(groups.3), median)
+data.frame(Cluster = a3[, 1], Freq = as.vector(table(groups.3)), a3[, -1])
+```
+
+```
+##   Cluster Freq   MPG Weight Drive_Ratio Horsepower Displacement Cylinders
+## 1       1    8 17.30  3.890       2.430      136.5          334         8
+## 2       2   20 30.25  2.215       3.455       79.0          105         4
+## 3       3   10 20.70  3.105       2.960      112.5          173         6
+```
+
+
+To see how the four cluster solution differed from the three cluster solution, we can perform the same analysis for that solution:
+
+
+```r
+a4 = aggregate(cars[, -c(1, 2)], list(groups.4), median)
+data.frame(Cluster = a4[, 1], Freq = as.vector(table(groups.4)), a4[, -1])
+```
+
+```
+##   Cluster Freq  MPG Weight Drive_Ratio Horsepower Displacement Cylinders
+## 1       1    8 17.3  3.890        2.43      136.5          334         8
+## 2       2   17 30.9  2.190        3.37       75.0           98         4
+## 3       3    3 21.5  2.795        3.77      110.0          121         4
+## 4       4   10 20.7  3.105        2.96      112.5          173         6
+```
+
+
+The main difference seems to be that the four cluster solution recognized a group of cars that have higher horsepower and drive ratios than the other cars in the cluster they came from.
