@@ -324,5 +324,3 @@ plot(titanic.survival.train.ctree)
 
 ![plot of chunk unnamed-chunk-5](figure/unnamed-chunk-5.png) 
 
-
-This is the end.

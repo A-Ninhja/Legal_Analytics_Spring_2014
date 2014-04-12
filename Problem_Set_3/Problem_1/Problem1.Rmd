@@ -53,5 +53,3 @@ titanic.survival.train.ctree = ctree(as.factor(survived) ~ pclass + sex + age + 
 titanic.survival.train.ctree
 plot(titanic.survival.train.ctree)
 ```
-
-This is the end.
