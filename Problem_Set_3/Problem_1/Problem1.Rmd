@@ -33,12 +33,6 @@ As you can see, I worked in an interaction effect between passenger class and se
 summary(titanic.survival.train)
 ```
 
-```{r}
-titanic.test$probs.glm = predict(titantic.survival.train, titanic.test, type=”response”)
-sum(titanic.test$probs.glm > .5)
-titanic.test$survived == 1)
-```
-
 So, after I used my model to predict survival probabilities on the testing portion of the dataset, I checked to see how many records showed a probability of over .5 (or 50%), and then how many of those records were actual survivors.  For the GLM, 146/164 (89%) of those records scored at 50% or higher were actual survivors.  Not bad!
 
 ## Random Forests

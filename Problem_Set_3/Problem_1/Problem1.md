@@ -217,9 +217,112 @@ summary(titanic.survival.train)
 ```
 
 
+So, after I used my model to predict survival probabilities on the testing portion of the dataset, I checked to see how many records showed a probability of over .5 (or 50%), and then how many of those records were actual survivors.  For the GLM, 146/164 (89%) of those records scored at 50% or higher were actual survivors.  Not bad!
+
+## Random Forests
+
+```r
+library(randomForest)
+```
+
+```
+## randomForest 4.6-7
+## Type rfNews() to see new features/changes/bug fixes.
+```
+
+```r
+titanic.survival.train.rf = randomForest(as.factor(survived) ~ pclass + sex + 
+    age + sibsp, data = titanic.train, ntree = 5000, importance = TRUE, na.action = na.omit)
+titanic.survival.train.rf
+```
+
+```
+## 
+## Call:
+##  randomForest(formula = as.factor(survived) ~ pclass + sex + age +      sibsp, data = titanic.train, ntree = 5000, importance = TRUE,      na.action = na.omit) 
+##                Type of random forest: classification
+##                      Number of trees: 5000
+## No. of variables tried at each split: 2
+## 
+##         OOB estimate of  error rate: 17.32%
+## Confusion matrix:
+##     0   1 class.error
+## 0 290  34      0.1049
+## 1  59 154      0.2770
+```
+
+```r
+importance(titanic.survival.train.rf)
+```
+
+```
+##             0       1 MeanDecreaseAccuracy MeanDecreaseGini
+## pclass  52.69  83.475                93.21            23.68
+## sex    261.39 302.222               328.78            86.82
+## age     85.65  73.552               111.39            44.60
+## sibsp   71.67  -3.948                59.32            11.66
+```
+
+It seems to me that the output indicates that the Random Forests model is better at creating true negatives than true positives, with regards to survival of the passengers, but when I asked for the predicted survival categories in the testing portion of my dataset, it appeared to do a pretty decent job predicting who would survive and who wouldn’t:
+
+For the Random Forests model, 155/184 (84%) of those records predicted to survive actually did survive!  Again, not bad.
+
+## The Conditional Tree Model
+
+```r
+library(party)
+```
+
+```
+## Loading required package: grid
+## Loading required package: zoo
+## 
+## Attaching package: 'zoo'
+## 
+## The following objects are masked from 'package:base':
+## 
+##     as.Date, as.Date.numeric
+## 
+## Loading required package: sandwich
+## Loading required package: strucchange
+## Loading required package: modeltools
+## Loading required package: stats4
+```
+
+```r
+titanic.survival.train.ctree = ctree(as.factor(survived) ~ pclass + sex + age + 
+    sibsp, data = titanic.train)
+titanic.survival.train.ctree
+```
+
+```
+## 
+## 	 Conditional inference tree with 5 terminal nodes
+## 
+## Response:  as.factor(survived) 
+## Inputs:  pclass, sex, age, sibsp 
+## Number of observations:  662 
+## 
+## 1) sex == {female}; criterion = 1, statistic = 216.071
+##   2) pclass <= 2; criterion = 1, statistic = 46.661
+##     3)*  weights = 129 
+##   2) pclass > 2
+##     4)*  weights = 98 
+## 1) sex == {male}
+##   5) age <= 3; criterion = 0.988, statistic = 8.813
+##     6)*  weights = 13 
+##   5) age > 3
+##     7) pclass <= 1; criterion = 0.963, statistic = 6.732
+##       8)*  weights = 84 
+##     7) pclass > 1
+##       9)*  weights = 338
+```
+
+```r
+plot(titanic.survival.train.ctree)
+```
+
+![plot of chunk unnamed-chunk-5](figure/unnamed-chunk-5.png) 
 
 
-
-
-
-
+This is the end.
