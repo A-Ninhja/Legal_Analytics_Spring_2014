@@ -1685,3 +1685,34 @@ data.frame(Cluster = a10[, 1], Freq = as.vector(table(groups.10)), a10[, -1])
 ## 10      10    2     1617.0     8.60  2926.5  2592
 ```
 
+
+## Regression Analysis:
+
+```r
+reg_1 <- lm(crime ~ density + nonwhite + population, data = Freedman)
+summary(reg_1)
+```
+
+```
+## 
+## Call:
+## lm(formula = crime ~ density + nonwhite + population, data = Freedman)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -2003.2  -657.2    70.9   603.7  2213.2 
+## 
+## Coefficients:
+##              Estimate Std. Error t value Pr(>|t|)    
+## (Intercept) 2193.7009   143.0457   15.34  < 2e-16 ***
+## density       -0.0215     0.0658   -0.33  0.74504    
+## nonwhite      26.0377     8.7675    2.97  0.00376 ** 
+## population     0.2449     0.0610    4.02  0.00012 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 877 on 96 degrees of freedom
+## Multiple R-squared:  0.229,	Adjusted R-squared:  0.205 
+## F-statistic: 9.49 on 3 and 96 DF,  p-value: 1.5e-05
+```
+

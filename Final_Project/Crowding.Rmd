@@ -62,3 +62,9 @@ aggregate(Freedman[, -c(1)], list(groups.10), mean)
 a10 = aggregate(Freedman[, -c(1)], list(groups.10), median)
 data.frame(Cluster = a10[,1], Freq = as.vector(table(groups.10)), a10[,-1])
 ```
+
+## Regression Analysis:
+```{r}
+reg_1 <- lm(crime ~ density + nonwhite + population, data=Freedman)
+summary(reg_1)
+```
