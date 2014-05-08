@@ -3,7 +3,7 @@ Predicting Crime Rates by Population Densities in Metro U.S. Cities
 ## Andy Ninh - 2014
 ========================================================
 
-# Using Hierarchial Clustering to Predict Crime Rates
+# Using Hierarchical Clustering to Predict Crime Rates
 
 ```{r}
 Freedman <- read.csv("~/Documents/MSU Law/Spring 2014/Legal Analytics/Legal_Analytics_Spring_2014/Final_Project/Freedman.csv")
