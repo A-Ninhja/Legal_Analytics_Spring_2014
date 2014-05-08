@@ -1,0 +1,64 @@
+Predicting Crime Rates by Population Densities in Metro U.S. Cities
+========================================================
+## Andy Ninh - 2014
+========================================================
+
+# Using Hierarchial Clustering to Predict Crime Rates
+
+```{r}
+Freedman <- read.csv("~/Documents/MSU Law/Spring 2014/Legal Analytics/Legal_Analytics_Spring_2014/Final_Project/Freedman.csv")
+head(Freedman)
+```
+
+```{r}
+Freedman.use = Freedman[, -c(1)]
+medians = apply(Freedman.use, 2, median)
+mads = apply(Freedman.use, 2, mad)
+Freedman.use = scale(Freedman.use, center = medians, scale = mads)
+Freedman.use
+```
+
+```{r}
+Freedman.dist = dist(Freedman.use)
+Freedman.dist
+```
+
+```{r}
+Freedman.hclust = hclust(Freedman.dist)
+Freedman.hclust
+```
+
+```{r}
+plot(Freedman.hclust, labels = Freedman$X)
+```
+
+```{r}
+groups.10 = cutree(Freedman.hclust, 10)
+```
+
+```{r}
+counts = sapply(2:10, function(ncl) table(cutree(Freedman.hclust, ncl)))
+names(counts) = 2:10
+counts
+```
+
+```{r}
+sapply(unique(groups.10), function(g) Freedman$X[groups.10 == g])
+```
+
+```{r}
+aggregate(Freedman.use, list(groups.10), median)
+```
+
+```{r}
+aggregate(Freedman[, -c(1)], list(groups.10), median)
+```
+
+```{r}
+aggregate(Freedman[, -c(1)], list(groups.10), mean)
+```
+
+```{r}
+a10 = aggregate(Freedman[, -c(1)], list(groups.10), median)
+data.frame(Cluster = a10[,1], Freq = as.vector(table(groups.10)), a10[,-1])
+```
